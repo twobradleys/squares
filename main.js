@@ -13,12 +13,13 @@ class Cell extends React.Component {
     super(props);
     this.rowIndex = props.rowIndex;
     this.colIndex = props.colIndex;
-    this.state = {owner: props.owner};
+    this.state = {owner: null};
   }
 
   _onPressButton = () => {
     console.log("You tapped the button!");
-    this.setState({owner: 'XX'});
+    // TODO assign to current picker, or unassign / replace
+    this.setState({owner: 'BB'});
   };
 
   render () {
@@ -34,21 +35,11 @@ class Cell extends React.Component {
 class Grid extends React.Component {
 
   render () {
-    let gridData = [
-      [null, null, null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null, null, null, null]
-    ];
-
+    // TODO shuffle after all squares picked
     let columnHeaders = [7,5,3,9,0,1,4,6,2,8];
     let rowHeaders    = [4,3,6,2,0,1,9,7,8,5];
+
+    let dims = [...Array(10)];
 
     let cellStyle = {width:25,height:25,borderWidth:1,borderColor:'black'};
 
@@ -60,11 +51,11 @@ class Grid extends React.Component {
           return <View key={i} style={cellStyle}><Text>{header}</Text></View>;
         })}
         </View>
-        {gridData.map(function(row, i){
+        {dims.map(function(_, i){
           return <View key={i} style={{flexDirection: 'row'}}>
             <View key="rowHeader" style={cellStyle}><Text>{rowHeaders[i]}</Text></View>
-            {row.map(function(owner, j){
-              return <Cell key={j} rowIndex={i} colIndex={j} owner={owner} />;
+            {dims.map(function(_, j){
+              return <Cell key={j} rowIndex={i} colIndex={j} />;
             })}
           </View>
         })}
