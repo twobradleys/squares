@@ -4,7 +4,7 @@ import Cell from './Cell'
 const Digits = ({ team }) => (
   <div style={{display: 'flex', flexDirection: team === 'home' ? 'row' : 'column'}}>
     {[...Array(10)].map((x, i) => (
-       <Cell key={i} />
+       <Cell key={i} contents='?' />
      ))}
   </div>
 )
