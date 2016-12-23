@@ -1,12 +1,12 @@
 import React from 'react'
 
-import Grid from '../components/Grid'
+import GameGrid from '../containers/GameGrid'
 import AddPlayer from '../containers/AddPlayer'
 import EnrolledPlayerList from '../containers/EnrolledPlayerList'
 
 const App = () => (
   <div>
-    <Grid />
+    <GameGrid />
     <EnrolledPlayerList />
     <AddPlayer />
   </div>

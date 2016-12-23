@@ -29,3 +29,9 @@ export const selectPlayer = (id) => ({
   type: 'SELECT_PLAYER',
   id
 });
+
+export const clickGridSquare = ({i, j}) => ({
+  type: 'CLICK_GRID_SQUARE',
+  i,
+  j
+})

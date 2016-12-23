@@ -1,16 +1,25 @@
-import React from 'react'
-import Cell from './Cell'
+import React, { PropTypes } from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import EntryCell from '../containers/EntryCell'
 
-const GridBody = () => (
+const GridBody = ({ grid }) => (
   <div style={{display: 'flex', flexDirection: 'column'}}>
-  {[...Array(10)].map((x, i) => (
+  {[...Array(10)].map((_, i) => (
     <div key={i} style={{display: 'flex', flexDirection: 'row'}}>
-    {[...Array(10)].map((y, j) => (
-      <Cell key={j} />
+    {[...Array(10)].map((_, j) => (
+      <EntryCell key={j} i={i} j={j} />
     ))}
     </div>
   ))}
   </div>
 )
+
+GridBody.propTypes = {
+  grid: ImmutablePropTypes.listOf(
+    ImmutablePropTypes.listOf(
+      PropTypes.number
+    ).isRequired
+  ).isRequired
+}
 
 export default GridBody

@@ -1,16 +1,13 @@
-import { combineReducers } from 'redux';
-import todos from './todos';
-import visibilityFilter from './visibilityFilter';
+import { combineReducers } from 'redux'
 
-import players from './players';
-import pickingPlayer from './pickingPlayer';
+import grid from './grid'
+import players from './players'
+import pickingPlayer from './pickingPlayer'
 
-const todoApp = combineReducers({
-  todos,
-  visibilityFilter,
-
+const squaresApp = combineReducers({
+  grid,
   players,
   pickingPlayer
-});
+})
 
-export default todoApp;
+export default squaresApp
