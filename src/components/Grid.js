@@ -2,17 +2,17 @@ import React, { PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
 import Cell from './Cell'
-import Digits from './Digits'
+import TeamDigits from '../containers/TeamDigits'
 import GridBody from './GridBody'
 
 const Grid = ({ entries }) => (
   <div style={{display: 'flex', flexDirection: 'column'}}>
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <Cell />
-      <Digits team="home" />
+      <TeamDigits team="home" />
     </div>
     <div style={{display: 'flex', flexDirection: 'row'}}>
-      <Digits team="away" />
+      <TeamDigits team="away" />
       <GridBody entries={entries} />
     </div>
   </div>

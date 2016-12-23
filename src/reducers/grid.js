@@ -4,12 +4,14 @@ import { findUnclaimedSquares } from '../selectors'
 
 const dims = Immutable.Range(0, 10).toList()
 const noEntries = dims.map(() => dims.map(() => null))
+const noDigits = dims.map(() => null)
 
 const initialState = Immutable.Map({
   entries: noEntries,
   locked: false,
   players: Immutable.List(),
   pickingPlayerId: null,
+  digits: Immutable.Map({home: noDigits, away: noDigits})
 })
 
 const grid = (state = initialState, action) => {
@@ -47,8 +49,8 @@ const grid = (state = initialState, action) => {
     }
 
     case 'LOCK_ENTRIES': {
-      return state.set('pickingPlayerId', null).set('locked', true)
-      // TODO generate and display digits
+      const digits = action.digitSeeds.map((team, seed) => Immutable.fromJS(shuffleSeed.shuffle(Immutable.Range(0,10).toJS(), seed)))
+      return state.set('digits', digits).set('pickingPlayerId', null).set('locked', true)
     }
 
     default: {

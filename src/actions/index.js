@@ -1,3 +1,7 @@
+// TODO use Immutable Maps for actions? Framework might not like that
+
+import Immutable from 'immutable'
+
 let nextPlayerId = 0;
 
 export const addPlayer = (name) => ({
@@ -24,5 +28,6 @@ export const makeQuickPicks = (count) => ({
 })
 
 export const lockEntries = () => ({
-  type: 'LOCK_ENTRIES'
+  type: 'LOCK_ENTRIES',
+  digitSeeds: Immutable.Map({home: Math.random(), away: Math.random()})
 })

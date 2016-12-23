@@ -1,16 +1,18 @@
 import React, { PropTypes } from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 import Cell from './Cell'
 
-const Digits = ({ team }) => (
+const Digits = ({ team, digits }) => (
   <div style={{display: 'flex', flexDirection: team === 'home' ? 'row' : 'column'}}>
-    {[...Array(10)].map((x, i) => (
-       <Cell key={i} contents='?' />
+    {digits.map((digit, index) => (
+       <Cell key={index} contents={digit ? digit.toString() : '?'} />
      ))}
   </div>
 )
 
 Digits.propTypes = {
-  team: PropTypes.string.isRequired
+  team: PropTypes.string.isRequired,
+  digits: ImmutablePropTypes.listOf(PropTypes.number).isRequired
 }
 
 export default Digits
