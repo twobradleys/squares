@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import EntryCell from '../containers/EntryCell'
 
-const GridBody = ({ grid }) => (
+const GridBody = ({ entries }) => (
   <div style={{display: 'flex', flexDirection: 'column'}}>
   {[...Array(10)].map((_, i) => (
     <div key={i} style={{display: 'flex', flexDirection: 'row'}}>
@@ -15,7 +15,7 @@ const GridBody = ({ grid }) => (
 )
 
 GridBody.propTypes = {
-  grid: ImmutablePropTypes.listOf(
+  entries: ImmutablePropTypes.listOf(
     ImmutablePropTypes.listOf(
       PropTypes.number
     ).isRequired

@@ -3,7 +3,7 @@ import { clickGridSquare } from '../actions'
 import Cell from '../components/Cell'
 
 const mapStateToProps = (state, ownProps) => ({
-  contents: state.grid.get(ownProps.i).get(ownProps.j)
+  contents: state.grid.getIn(['entries', ownProps.i, ownProps.j])
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

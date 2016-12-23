@@ -5,7 +5,7 @@ import Cell from './Cell'
 import Digits from './Digits'
 import GridBody from './GridBody'
 
-const Grid = ({ grid }) => (
+const Grid = ({ entries }) => (
   <div style={{display: 'flex', flexDirection: 'column'}}>
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <Cell />
@@ -13,14 +13,14 @@ const Grid = ({ grid }) => (
     </div>
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <Digits team="away" />
-      <GridBody grid={grid} />
+      <GridBody entries={entries} />
     </div>
   </div>
 )
 
 Grid.propTypes = {
   // TODO push this down to a GridBody container
-  grid: ImmutablePropTypes.listOf(
+  entries: ImmutablePropTypes.listOf(
     ImmutablePropTypes.listOf(
       PropTypes.number
     ).isRequired

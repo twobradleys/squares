@@ -1,16 +1,18 @@
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import Player from './Player';
 
-const PlayerList = ({ players, pickingPlayer, onPlayerClick }) => (
+const PlayerList = ({ players, pickingPlayerId, onPlayerClick }) => (
   <div className='PlayerList'>
     <h1>Players</h1>
     <div style={{display: 'flex', flexDirection: 'row'}}>
       {players.map(player =>
         <Player
-            key={player.id}
-            {...player}
-            picking={pickingPlayer === player.id}
-            onClick={() => onPlayerClick(player.id)}
+          key={player.get('id')}
+          id={player.get('id')}
+          name={player.get('name')}
+          picking={pickingPlayerId === player.get('id')}
+          onClick={() => onPlayerClick(player.get('id'))}
          />
       )}
     </div>
@@ -18,11 +20,11 @@ const PlayerList = ({ players, pickingPlayer, onPlayerClick }) => (
 );
 
 PlayerList.propTypes = {
-  players: PropTypes.arrayOf(PropTypes.shape({
+  players: ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired).isRequired,
-  pickingPlayer: PropTypes.number,
+  pickingPlayerId: PropTypes.number,
   onPlayerClick: PropTypes.func.isRequired
 };
 
