@@ -5,7 +5,7 @@ const Cell = ({ contents, onClick }) => (
 )
 
 Cell.propTypes = {
-  contents: PropTypes.number,
+  contents: PropTypes.string,
   onClick: PropTypes.func
 }
 
