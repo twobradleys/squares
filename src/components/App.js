@@ -12,8 +12,9 @@ const App = () => (
     <VisibleTodoList />
     <Footer />
 
-    <AddPlayer />
+
     <EnrolledPlayerList />
+    <AddPlayer />
   </div>
 )
 

@@ -6,7 +6,7 @@ let AddPlayer = ({ dispatch }) => (
   <div>
   <a href onClick={e => {
     e.preventDefault();
-    dispatch(addPlayer("Foo"));
+    dispatch(addPlayer(window.prompt("Player Initials?")));
   }}>Add Player</a>
   </div>
 );
