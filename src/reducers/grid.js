@@ -13,26 +13,30 @@ const initialState = Immutable.Map({
 const grid = (state = initialState, action) => {
   switch (action.type) {
 
-    case 'ADD_PLAYER':
+    case 'ADD_PLAYER': {
       return state
         .update('players', players => players.push(Immutable.Map({id: action.id, name: action.name})))
         .set('pickingPlayerId', action.id)
+    }
 
-    case 'SELECT_PLAYER':
+    case 'SELECT_PLAYER': {
       // Acts as a toggle; either set a new picking player, or "turn off" the current one
-      if (state.get('pickingPlayerId') === action.id) {
+      const pickingPlayerId = state.get('pickingPlayerId')
+      if (pickingPlayerId === action.id) {
         return state.set('pickingPlayerId', null)
       } else {
         return state.set('pickingPlayerId', action.id)
       }
+    }
 
-    case 'CLICK_GRID_SQUARE':
+    case 'CLICK_GRID_SQUARE': {
       return state.setIn(['entries', action.i, action.j], state.get('pickingPlayerId'))
+    }
 
     case 'MAKE_QUICK_PICKS': {
       const pickingPlayerId = state.get('pickingPlayerId')
       const squares = state.get('entries').flatMap((row, i) => row.map((owner, j) => Immutable.Map({i, j, owner})))
-      const unclaimedSquares = squares.filter(square => square.get('owner') === null) // TODO maybe you can destructure these maps?
+      const unclaimedSquares = squares.filter(square => square.get('owner') === null)
       const quickPickSquares = Immutable.fromJS(shuffleSeed.shuffle(unclaimedSquares.toJS(), action.seed)).take(action.count)
       return state
         .update('entries', entries =>
@@ -41,8 +45,9 @@ const grid = (state = initialState, action) => {
                                entries))
     }
 
-    default:
+    default: {
       return state
+    }
   }
 }
 
