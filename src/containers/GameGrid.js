@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import Grid from '../components/Grid'
 
 const mapStateToProps = (state) => ({
- entries: state.grid.get('entries')
+ entries: state.getIn(['grid', 'entries'])
 })
 
 const mapDispatchToProps = ({

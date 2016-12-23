@@ -3,11 +3,11 @@ import { makeQuickPicks } from '../actions'
 import QuickPicker from '../components/QuickPicker'
 
 const mapStateToProps = (state) => {
-  const pickingPlayerId = state.grid.get('pickingPlayerId')
+  const pickingPlayerId = state.getIn(['grid', 'pickingPlayerId'])
   if (pickingPlayerId == null) {
     return {isActive: false}
   } else {
-    const pickingPlayer = state.grid.get('players').find(p => p.get('id') === pickingPlayerId)
+    const pickingPlayer = state.getIn(['grid', 'players']).find(p => p.get('id') === pickingPlayerId)
     return {isActive: true, name: pickingPlayer.get('name')}
   }
 }
