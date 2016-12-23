@@ -23,4 +23,9 @@ export const addPlayer = (name) => ({
   type: 'ADD_PLAYER',
   id: nextPlayerId++,
   name
-})
+});
+
+export const selectPlayer = (id) => ({
+  type: 'SELECT_PLAYER',
+  id
+});

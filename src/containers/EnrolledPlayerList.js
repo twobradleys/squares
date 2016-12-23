@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { selectPlayer } from '../actions';
 import PlayerList from '../components/PlayerList';
 
 const mapStateToProps = (state) => ({
@@ -6,7 +7,9 @@ const mapStateToProps = (state) => ({
   players: state.players
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = ({
+  onPlayerClick: selectPlayer
+});
 
 const EnrolledPlayerList = connect(
   mapStateToProps,
