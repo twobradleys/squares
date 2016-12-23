@@ -20,6 +20,7 @@
     "react-redux": "^5.0.1",
     "redux": "^3.6.0",
     "redux-immutable": "^3.0.9",
+    "reselect": "^2.5.4",
     "shuffle-seed": "^1.1.6"
   },
   "scripts": {

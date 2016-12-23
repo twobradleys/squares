@@ -1,11 +1,13 @@
 import Immutable from 'immutable'
 import shuffleSeed from 'shuffle-seed'
+import { findUnclaimedSquares } from '../selectors'
 
 const dims = Immutable.Range(0, 10).toList()
 const noEntries = dims.map(() => dims.map(() => null))
 
 const initialState = Immutable.Map({
   entries: noEntries,
+  locked: false,
   players: Immutable.List(),
   pickingPlayerId: null,
 })
@@ -35,14 +37,18 @@ const grid = (state = initialState, action) => {
 
     case 'MAKE_QUICK_PICKS': {
       const pickingPlayerId = state.get('pickingPlayerId')
-      const squares = state.get('entries').flatMap((row, i) => row.map((owner, j) => Immutable.Map({i, j, owner})))
-      const unclaimedSquares = squares.filter(square => square.get('owner') === null)
+      const unclaimedSquares = findUnclaimedSquares(state.get('entries'))
       const quickPickSquares = Immutable.fromJS(shuffleSeed.shuffle(unclaimedSquares.toJS(), action.seed)).take(action.count)
       return state
         .update('entries', entries =>
           quickPickSquares.reduce((e, square) =>
             e.setIn([square.get('i'), square.get('j')], pickingPlayerId),
                                entries))
+    }
+
+    case 'LOCK_ENTRIES': {
+      return state.set('pickingPlayerId', null).set('locked', true)
+      // TODO generate and display digits
     }
 
     default: {

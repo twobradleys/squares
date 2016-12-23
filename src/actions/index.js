@@ -22,3 +22,7 @@ export const makeQuickPicks = (count) => ({
   count: count,
   seed: Math.random()
 })
+
+export const lockEntries = () => ({
+  type: 'LOCK_ENTRIES'
+})
