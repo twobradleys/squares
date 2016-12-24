@@ -1,11 +1,10 @@
-import React, { PropTypes } from 'react'
-import ImmutablePropTypes from 'react-immutable-proptypes'
+import React from 'react'
 
 import Cell from './Cell'
 import TeamDigits from '../containers/TeamDigits'
-import GridBody from './GridBody'
+import GameGrid from '../containers/GameGrid'
 
-const Grid = ({ entries }) => (
+const Grid = () => (
   <div style={{display: 'flex', flexDirection: 'column'}}>
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <Cell active={false} />
@@ -13,18 +12,9 @@ const Grid = ({ entries }) => (
     </div>
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <TeamDigits team="away" />
-      <GridBody entries={entries} />
+      <GameGrid />
     </div>
   </div>
 )
-
-Grid.propTypes = {
-  // TODO push this down to a GridBody container
-  entries: ImmutablePropTypes.listOf(
-    ImmutablePropTypes.listOf(
-      PropTypes.number
-    ).isRequired
-  ).isRequired
-}
 
 export default Grid

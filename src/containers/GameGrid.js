@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import Grid from '../components/Grid'
+import GridBody from '../components/GridBody'
 
 const mapStateToProps = (state) => ({
  entries: state.getIn(['grid', 'entries'])
@@ -8,6 +8,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = ({
 })
 
-const GameGrid = connect(mapStateToProps, mapDispatchToProps)(Grid)
+const GameGrid = connect(mapStateToProps, mapDispatchToProps)(GridBody)
 
 export default GameGrid

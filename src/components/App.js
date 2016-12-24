@@ -1,14 +1,16 @@
 import React from 'react'
 
-import GameGrid from '../containers/GameGrid'
+import Grid from '../components/Grid'
 import CurrentPicker from '../containers/CurrentPicker'
 import EnrolledPlayerList from '../containers/EnrolledPlayerList'
 import AddPlayer from '../containers/AddPlayer'
 import LockEntries from '../containers/LockEntries'
 
+import './App.css'
+
 const App = () => (
   <div>
-    <GameGrid />
+    <Grid />
     <EnrolledPlayerList />
     <AddPlayer />
     <CurrentPicker />
