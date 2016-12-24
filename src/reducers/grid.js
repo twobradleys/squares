@@ -34,7 +34,11 @@ const grid = (state = initialState, action) => {
     }
 
     case 'CLICK_GRID_SQUARE': {
-      return state.setIn(['entries', action.i, action.j], state.get('pickingPlayerId'))
+      if (state.getIn(['locked']) === false) {
+        return state.setIn(['entries', action.i, action.j], state.get('pickingPlayerId'))
+      } else {
+        return state;
+      }
     }
 
     case 'MAKE_QUICK_PICKS': {
