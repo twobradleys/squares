@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Redux Todos Example</title>
     <style>
-     .Player {
-       border: 1px dashed black;
-       text-transform: uppercase;
-       font-family: monospace;
-       margin: 3px;
-       padding: 5px;
+     div {
+       box-sizing: border-box;
      }
 
-     .Player.Picking {
-       border: 2px solid black;
+     .Cell {
+       width: 25px;
+       height: 25px;
+       border: 1px solid black;
+     }
+
+     .Cell.Active {
+       border: 3px solid black;
      }
     </style>
   </head>

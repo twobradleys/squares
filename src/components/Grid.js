@@ -8,7 +8,7 @@ import GridBody from './GridBody'
 const Grid = ({ entries }) => (
   <div style={{display: 'flex', flexDirection: 'column'}}>
     <div style={{display: 'flex', flexDirection: 'row'}}>
-      <Cell />
+      <Cell active={false} />
       <TeamDigits team="home" />
     </div>
     <div style={{display: 'flex', flexDirection: 'row'}}>

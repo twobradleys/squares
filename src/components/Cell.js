@@ -1,10 +1,11 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes } from 'react'
 
-const Cell = ({ contents, onClick }) => (
-  <div onClick={onClick} style={{width: '25px', height: '25px', border: '1px solid black'}}>{contents}</div>
+const Cell = ({ active, contents, onClick }) => (
+  <div className={'Cell ' + (active ? 'Active' : '')} onClick={onClick}>{contents}</div>
 )
 
 Cell.propTypes = {
+  active: PropTypes.bool.isRequired,
   contents: PropTypes.string,
   onClick: PropTypes.func
 }

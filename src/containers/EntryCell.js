@@ -3,13 +3,17 @@ import { clickGridSquare } from '../actions'
 import Cell from '../components/Cell'
 
 const mapStateToProps = (state, ownProps) => {
-  const owningPlayerId = state.getIn(['grid', 'entries', ownProps.i, ownProps.j]);
+  const owningPlayerId = state.getIn(['grid', 'entries', ownProps.i, ownProps.j])
 
   if (owningPlayerId !== null) {
     const owningPlayer = state.getIn(['grid', 'players']).find(p => p.get('id') === owningPlayerId)
-    return {contents: owningPlayer.get('name')}
+    const pickingPlayerId = state.getIn(['grid', 'pickingPlayerId'])
+    return {
+      contents: owningPlayer.get('name'),
+      active: owningPlayerId === pickingPlayerId
+    }
   } else {
-    return {contents: null}
+    return {contents: null, active: false}
   }
 }
 
