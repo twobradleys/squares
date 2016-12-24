@@ -14,5 +14,8 @@
     "standard",
     "promise",
     "react"
-  ]
+  ],
+  "rules": {
+    "semi": ["error", "never"]
+  }
 }
