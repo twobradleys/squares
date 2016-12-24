@@ -5,7 +5,7 @@ import Cell from './Cell'
 const Digits = ({ team, digits }) => (
   <div style={{display: 'flex', flexDirection: team === 'home' ? 'row' : 'column'}}>
     {digits.map((digit, index) => (
-       <Cell key={index} contents={(digit === null) ? digit.toString() : '?'} />
+       <Cell key={index} contents={(digit !== null) ? digit.toString() : '?'} />
      ))}
   </div>
 )
