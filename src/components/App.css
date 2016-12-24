@@ -1,3 +1,13 @@
 div {
   box-sizing: border-box;
 }
+
+div.FlexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+div.FlexRow {
+  display: flex;
+  flex-direction: row;
+}
