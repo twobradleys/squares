@@ -3,7 +3,7 @@ class Situation
   HOME = 0
   AWAY = 1
 
-  attr_reader :play_type
+  attr_reader :play_type, :down, :field_position
 
   def initialize
     @possession = HOME
@@ -12,12 +12,35 @@ class Situation
       HOME => [nil, 0, 0, 0, 0],
       AWAY => [nil, 0, 0, 0, 0],
     }
-    @field_position = 20 # from the possessing team's perspective. 0 = own end zone, 100 = opponent end zone
+    @field_position = 0 # from the possessing team's perspective. 0 = own end zone, 100 = opponent end zone
     @down = 1
-    @line_to_gain = 30
+    @line_to_gain = 10
     @quarter = 1
     @seconds_remaining = 15 * 60
-    @play_type = :from_scrimmage
+
+    kickoff
+  end
+
+  def to_s
+    q = @quarter == 5 ? 'OT' : "Q#{@quarter}"
+    mins = @seconds_remaining / 60
+    secs = @seconds_remaining % 60
+    to_gain = (@line_to_gain >= 100) ? 'Goal' : @line_to_gain - @field_position
+    yard_end = @field_position >= 50 ? 'Opp' : 'Own'
+    rel_yard = @field_position >= 50 ? 100 - @field_position : @field_position
+
+    scrimmage = case @play_type
+                when :from_scrimmage
+                  "#{@down} and #{to_gain} at #{yard_end} #{rel_yard}"
+                when :point_after_touchdown
+                  "point after attempt"
+                when :kickoff
+                  "kickoff"
+                when :free_kick
+                  "free_kick"
+                end
+
+    "Bears #{away_score} - Lions #{home_score}, #{q} #{mins}:#{secs} #{(@possession == HOME) ? 'Lions' : 'Bears'} ball, #{scrimmage}"
   end
 
   def total_score(team)
@@ -34,6 +57,7 @@ class Situation
 
   def is_finished?
     # TODO does not take full OT rules into account; this is a sudden-death model
+    # TODO games cannot end in ties in the playoffs
     ((@quarter > 4) && (home_score != away_score)) || # 4th quarter ended in non-tie or
       (@quarter > 5) # OT ended, game is tied
   end
@@ -47,11 +71,22 @@ class Situation
   def first_down
     @down = 1
     @line_to_gain = @field_position + 10 # TODO think it's okay if this goes over 100
+    @play_type = :from_scrimmage
   end
 
   def score(points, defensive_score = false)
     scorer = defensive_score ? 1 - @possession : @possession
     @score_by_quarter[scorer][@quarter] += points
+  end
+
+  def free_kick
+    @play_type = :free_kick
+    @field_position = 20
+  end
+
+  def kickoff
+    @play_type = :kickoff
+    @field_position = 35
   end
 
   def apply_result(result)
@@ -68,7 +103,7 @@ class Situation
       elsif @field_position <= 0
         # Safety
         score(2, true)
-        @play_type = :kickoff
+        free_kick
       elsif result.repeat_down
         # No-op
       else
@@ -82,35 +117,46 @@ class Situation
       if result.success
         score(1)
       end
-      @play_type = :kickoff
+      kickoff
 
     when TwoPointConversionResult
       if result.success
         score(2)
       end
-      @play_type = :kickoff
+      kickoff
 
     when FieldGoalResult
       if result.success
         score(3)
-        @play_type = :kickoff
+        kickoff
       else
         turnover
       end
 
-    when KickoffResult, FreeKickResult
-      turnover
-      @field_position = result.starting_field_position
-      first_down
-      @play_type = :from_scrimmage
-
-    when PuntResult
-      @field_position += result.net_distance
-      if @field_position > 100
-        # touchback
-        @field_position = 80
+    when ReturnableKickResult
+      # This handles all three types of returnable kicks
+      @field_position += result.kick_distance
+      if result.touchback
+        turnover
+        @field_position = result === KickoffResult ? 25 : 20
+      else
+        turnover
+        @field_position += result.return_distance
       end
-      turnover
+
+      # Now check for a TD or safety
+      # TODO dedup with scrimmage logic
+      if @field_position >= 100
+        # touchdown
+        score(6)
+        @play_type = :point_after_touchdown
+      elsif @field_position <= 0
+        # Safety
+        score(2, true)
+        free_kick
+      else
+        first_down
+      end
 
     when TakeawayResult
       turnover
@@ -125,16 +171,23 @@ class Situation
         @field_position = 20
         first_down
       end
+
     else
       raise "unknown result type #{result.class}"
 
     end
 
     # advance the clock
+    # TODO two minute warning?
     @seconds_remaining -= result.seconds_elapsed
     if (@seconds_remaining <= 0) && (@play_type != :point_after_touchdown)
       @quarter += 1
       @seconds_remaining = 15 * 60
+
+      if @quarter == 3
+        @possession = AWAY
+        kickoff
+      end
     end
   end
 end
@@ -143,7 +196,7 @@ class Result
   # Takeaway == interception or fumble. Scoring plays and turnovers on downs are not takeaways
   attr_reader :seconds_elapsed
 
-  def initialize
+  def initialize(situation)
     @seconds_elapsed = rand(60)
   end
 
@@ -152,18 +205,24 @@ class Result
 
     case situation.play_type
     when :from_scrimmage
-      # TODO think about punting or kicking
-      FromScrimmageResult.new
+      if (situation.down != 4)
+        FromScrimmageResult.new(situation)
+      elsif (situation.field_position > 62)
+        FieldGoalResult.new(situation)
+      else
+        PuntResult.new(situation)
+      end
 
     when :point_after_touchdown
       # TODO think about going for two. Need the table!
-      OnePointConversionResult.new
+      OnePointConversionResult.new(situation)
 
     when :kickoff
-      KickoffResult.new
+      # TODO onside kick
+      KickoffResult.new(situation)
 
     when :free_kick
-      FreeKickResult.new
+      FreeKickResult.new(situation)
 
     end
   end
@@ -172,19 +231,33 @@ end
 class FromScrimmageResult < Result
   attr_reader :repeat_down, :yards_gained
 
-  def initialize
+  def initialize(situation)
     super
     @repeat_down = false # TODO make this possible
-    @yards_gained = rand(15) - 2 # TODO better distribution
+    @yards_gained = rand(9) - 2 # TODO better distribution
+  end
+
+  def to_s
+    if @yards_gained > 0
+      "Gain of #{@yards_gained} yard(s)"
+    elsif @yards_gained < 0
+      "Loss of #{-1 * @yards_gained} yard(s)"
+    else
+      "No gain"
+    end
   end
 end
 
 class OnePointConversionResult < Result
   attr_reader :success
 
-  def initialize
-    super
+  def initialize(situation)
+    super(situation)
     @success = rand < 0.9 # TODO
+  end
+
+  def to_s
+    "XP attempt is #{@success ? 'good' : 'no good'}"
   end
 end
 
@@ -192,7 +265,7 @@ class TwoPointConversionResult < Result
   attr_reader :success
 
   def initialize
-    super
+    super(situation)
     @success = rand < 0.55 # TODO
   end
 end
@@ -200,39 +273,74 @@ end
 class FieldGoalResult < Result
   attr_reader :success
 
-  def initialize
-    super
-    # TODO
+  def initialize(situation)
+    super(situation)
+    @success = rand < 0.7 # TODO factor in FG distance
+  end
+
+  def to_s
+    "Field goal #{@success ? 'good' : 'missed'}"
   end
 end
 
-class KickoffResult < Result
-  attr_reader :starting_field_position
+# Abstract
+class ReturnableKickResult < Result
+  attr_reader :kick_distance, :touchback, :return_distance
 
-  def initialize
-    super
-    @starting_field_position = (rand < 0.3) ? 25 : rand(105)
+  def initialize(situation, kick_distance, return_distance)
+    super(situation)
+
+    @kick_distance = kick_distance
+    @return_distance = return_distance
+    @touchback = if situation.field_position + kick_distance >= 100
+                   rand > 0.2
+                 else
+                   false
+                 end
+  end
+
+  # TODO model a takeaway on a return, which is different than a takeaway from
+  # scrimmage in terms of field position
+
+  def to_s
+    # TODO model like punt with touchback, distance, return, out of bounds
+    if @touchback
+      "#{kick_type} of #{@kick_distance} yards for a touchback"
+    else
+      "#{kick_type} of #{@kick_distance} yards with a #{@return_distance} yard return" # TODO max this out
+    end
   end
 end
 
-class FreeKickResult < Result
-  attr_reader :starting_field_position
+class KickoffResult < ReturnableKickResult
+  def initialize(situation)
+    super(situation, rand(30) + 55, rand(120 - 15))
+  end
 
-  def initialize
-    super
-    # TODO different distribution than touchdowns
-    @starting_field_position = (rand < 0.2) ? 25 : rand(115)
+  def kick_type
+    'Kickoff'
   end
 end
 
-class PuntResult < Result
-  attr_reader :net_distance
+class FreeKickResult < ReturnableKickResult
+  def initialize(situation)
+    super(situation, rand(30) + 40, rand(125 - 15))
+  end
 
-  def initialize(punting_field_position)
-    super
-    target_distance = [65, (100 - punting_field_position) + 5].min
-    return_distance = rand(100)
-    rand(target_distance) + return_distance
+  def kick_type
+    'Free Kick'
+  end
+end
+
+class PuntResult < ReturnableKickResult
+  def initialize(situation)
+    target_distance = [65, (100 - situation.field_position) + 5].min
+    kick_distance = rand(target_distance)
+    super(situation, kick_distance, rand(125 - 10))
+  end
+
+  def kick_type
+    'Punt'
   end
 end
 
@@ -248,8 +356,8 @@ end
 # main
 situation = Situation.new
 until situation.is_finished?
-  p situation
+  puts situation
   result = Result.simulate_for_situation(situation)
-  p result
+  puts result
   situation.apply_result(result)
 end
