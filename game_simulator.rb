@@ -37,7 +37,7 @@ class Situation
                 when :kickoff
                   "kickoff"
                 when :free_kick
-                  "free_kick"
+                  "free kick"
                 end
 
     "Bears #{away_score} - Lions #{home_score}, #{q} #{mins}:#{secs} #{(@possession == HOME) ? 'Lions' : 'Bears'} ball, #{scrimmage}"
@@ -63,18 +63,41 @@ class Situation
   end
 
   def turnover
+    puts "---> Turnover"
+    change_of_possession
+  end
+
+  def change_of_possession
+    puts "--> Change of possession"
     @possession = 1 - @possession
     @field_position = 100 - @field_position
-    first_down
   end
 
   def first_down
+    puts "--> First down"
+    new_downs
+  end
+
+  def new_downs
     @down = 1
     @line_to_gain = @field_position + 10 # TODO think it's okay if this goes over 100
     @play_type = :from_scrimmage
   end
 
+  def touchdown
+    puts "--> Touchdown"
+    score(6)
+    @play_type = :point_after_touchdown
+  end
+
+  def safety
+    puts "--> Safety"
+    score(2, true)
+    free_kick
+  end
+
   def score(points, defensive_score = false)
+    puts "--> Score #{points}" + (defensive_score ? ' (defensive)' : '')
     scorer = defensive_score ? 1 - @possession : @possession
     @score_by_quarter[scorer][@quarter] += points
   end
@@ -95,15 +118,11 @@ class Situation
       @field_position += result.yards_gained
 
       if @field_position >= 100
-        # touchdown
-        score(6)
-        @play_type = :point_after_touchdown
+        touchdown
       elsif @field_position >= @line_to_gain
         first_down
       elsif @field_position <= 0
-        # Safety
-        score(2, true)
-        free_kick
+        safety
       elsif result.repeat_down
         # No-op
       else
@@ -130,32 +149,29 @@ class Situation
         score(3)
         kickoff
       else
-        turnover
+        change_of_possession
+        new_downs
       end
 
     when ReturnableKickResult
       # This handles all three types of returnable kicks
       @field_position += result.kick_distance
+      change_of_possession
+
       if result.touchback
-        turnover
         @field_position = result === KickoffResult ? 25 : 20
       else
-        turnover
         @field_position += result.return_distance
       end
 
       # Now check for a TD or safety
       # TODO dedup with scrimmage logic
       if @field_position >= 100
-        # touchdown
-        score(6)
-        @play_type = :point_after_touchdown
+        touchdown
       elsif @field_position <= 0
-        # Safety
-        score(2, true)
-        free_kick
+        safety
       else
-        first_down
+        new_downs
       end
 
     when TakeawayResult
@@ -163,11 +179,10 @@ class Situation
       @field_position += result.taking_team_yards_gained
 
       if @field_position >= 100
-        # touchdown
-        score(6)
-        @play_type = :point_after_touchdown
+        touchdown
       elsif @field_position <= 0
         # touchback
+        # TODO can there be a safety on a takeaway? technically i think yet but very rare
         @field_position = 20
         first_down
       end
