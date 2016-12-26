@@ -12,9 +12,6 @@ class Situation
       HOME => [nil, 0, 0, 0, 0],
       AWAY => [nil, 0, 0, 0, 0],
     }
-    @field_position = 0 # from the possessing team's perspective. 0 = own end zone, 100 = opponent end zone
-    @down = 1
-    @line_to_gain = 10
     @quarter = 1
     @seconds_remaining = 15 * 60
 
@@ -25,12 +22,13 @@ class Situation
     q = @quarter == 5 ? 'OT' : "Q#{@quarter}"
     mins = @seconds_remaining / 60
     secs = @seconds_remaining % 60
-    to_gain = (@line_to_gain >= 100) ? 'Goal' : @line_to_gain - @field_position
+
     yard_end = @field_position >= 50 ? 'Opp' : 'Own'
     rel_yard = @field_position >= 50 ? 100 - @field_position : @field_position
 
     scrimmage = case @play_type
                 when :from_scrimmage
+                  to_gain = (@line_to_gain >= 100) ? 'Goal' : @line_to_gain - @field_position
                   "#{@down} and #{to_gain} at #{yard_end} #{rel_yard}"
                 when :point_after_touchdown
                   "point after attempt"
@@ -200,6 +198,7 @@ class Situation
       @seconds_remaining = 15 * 60
 
       if @quarter == 3
+        puts "--> End of half"
         @possession = AWAY
         kickoff
       end
