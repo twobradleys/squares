@@ -1,4 +1,19 @@
+# https://en.wikipedia.org/wiki/Gumbel_distribution#Quantile_function_and_generating_Gumbel_variates
+def draw_gumbel(mu, beta, p)
+  mu - beta*Math.log(-1 * Math.log(p))
+end
+
+mu = 1.9123725393649005
+beta = 3.8469704448139956
+
+100.times do
+  p draw_gumbel(mu, beta, rand())
+end
+
+exit
+
 class Situation
+  # TODO validate this
   PLAY_TYPES = %i(from_scrimmage point_after_touchdown kickoff free_kick)
   HOME = 0
   AWAY = 1
@@ -41,6 +56,7 @@ class Situation
     "Bears #{away_score} - Lions #{home_score}, #{q} #{mins}:#{secs} #{(@possession == HOME) ? 'Lions' : 'Bears'} ball, #{scrimmage}"
   end
 
+  # Selectors
   def total_score(team)
     @score_by_quarter[team][1] + @score_by_quarter[team][2] + @score_by_quarter[team][3] + @score_by_quarter[team][4]
   end
@@ -59,7 +75,9 @@ class Situation
     ((@quarter > 4) && (home_score != away_score)) || # 4th quarter ended in non-tie or
       (@quarter > 5) # OT ended, game is tied
   end
+  # End selectors
 
+  # Helper functions for apply result
   def turnover
     puts "---> Turnover"
     change_of_possession
@@ -109,7 +127,9 @@ class Situation
     @play_type = :kickoff
     @field_position = 35
   end
+  # End helper functions
 
+  # This is basically our reducer, with everything above as convenience functions
   def apply_result(result)
     case result
     when FromScrimmageResult
@@ -247,7 +267,7 @@ class FromScrimmageResult < Result
 
   def initialize(situation)
     super
-    @repeat_down = false # TODO make this possible
+    @repeat_down = false # TODO make this possible. Might need PenaltyResult subclasses
     @yards_gained = rand(9) - 2 # TODO better distribution
   end
 
@@ -267,7 +287,7 @@ class OnePointConversionResult < Result
 
   def initialize(situation)
     super(situation)
-    @success = rand < 0.9 # TODO
+    @success = rand < 0.9 # TODO, probably higher
   end
 
   def to_s
@@ -307,7 +327,7 @@ class ReturnableKickResult < Result
     @kick_distance = kick_distance
     @return_distance = return_distance
     @touchback = if situation.field_position + kick_distance >= 100
-                   rand > 0.2
+                   rand > 0.2 # TODO
                  else
                    false
                  end
@@ -328,7 +348,7 @@ end
 
 class KickoffResult < ReturnableKickResult
   def initialize(situation)
-    super(situation, rand(30) + 55, rand(120 - 15))
+    super(situation, rand(30) + 55, rand(120 - 15)) # TODO
   end
 
   def kick_type
@@ -338,7 +358,7 @@ end
 
 class FreeKickResult < ReturnableKickResult
   def initialize(situation)
-    super(situation, rand(30) + 40, rand(125 - 15))
+    super(situation, rand(30) + 40, rand(125 - 15)) # TODO
   end
 
   def kick_type
@@ -348,6 +368,7 @@ end
 
 class PuntResult < ReturnableKickResult
   def initialize(situation)
+    # TODO
     target_distance = [65, (100 - situation.field_position) + 5].min
     kick_distance = rand(target_distance)
     super(situation, kick_distance, rand(125 - 10))
