@@ -1,6 +1,6 @@
-import React, { PropTypes } from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import Player from './Player';
+import React, { PropTypes } from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import Player from './Player'
 
 const PlayerList = ({ players, pickingPlayerId, onPlayerClick }) => (
   <div className='PlayerList'>
@@ -17,7 +17,7 @@ const PlayerList = ({ players, pickingPlayerId, onPlayerClick }) => (
       )}
     </div>
   </div>
-);
+)
 
 PlayerList.propTypes = {
   players: ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
@@ -26,6 +26,6 @@ PlayerList.propTypes = {
   }).isRequired).isRequired,
   pickingPlayerId: PropTypes.number,
   onPlayerClick: PropTypes.func.isRequired
-};
+}
 
-export default PlayerList;
+export default PlayerList
