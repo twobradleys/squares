@@ -3,13 +3,13 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 
 const Game = ({ game }) => (
   <div className='flexColumn'>
-    <span>{game.get('eventName')}</span>
+    <div>{game.get('event_name')}</div>
   </div>
 )
 
 Game.propTypes = {
   game: ImmutablePropTypes.contains({
-    eventName: PropTypes.string.isRequired
+    event_name: PropTypes.string.isRequired
   }).isRequired
 }
 

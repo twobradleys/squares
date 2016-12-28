@@ -26,13 +26,10 @@ const App = () => (
 )
 */
 
-import GameList from './GameList'
-
-import Immutable from 'immutable'
-const GAMES = Immutable.List([Immutable.Map({eventName: 'foo'}), Immutable.Map({eventName: 'bar'})])
+import ServerGameList from '../containers/ServerGameList'
 
 const App = () => (
-  <GameList games={GAMES} />
+  <ServerGameList />
 )
 
 export default App
