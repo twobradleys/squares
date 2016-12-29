@@ -15,7 +15,7 @@ function* watchGetAllTeams() {
 function* createTeam(action) {
   yield put(actions.addTeamProvisional(action.payload))
   yield call(api.createTeam, action.payload)
-  yield getAllTeams() // refresh
+  yield put(actions.fetchTeams()) // refresh
 }
 
 function* watchCreateTeam() {

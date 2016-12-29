@@ -26,6 +26,7 @@ export const fetchGames = createAction('FETCH_GAMES')
 // Teams
 // TODO put these in own file?
 
+// TODO invalidations are unused, keep them around?
 export const invalidateTeams = createAction('INVALIDATE_TEAMS')
 export const fetchTeams = createAction('FETCH_TEAMS')
 export const createTeam = createAction('CREATE_TEAM', name => ({name}))
