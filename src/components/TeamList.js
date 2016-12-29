@@ -6,7 +6,6 @@ import Team from './Team'
 // TODO dry out with GameList, make an EntityList component?
 const TeamList = ({ teamsState, fetchTeams, createTeam }) => (
   <div className='FlexColumn'>
-    <h1>Teams</h1>
     {teamsState.get('teams').size === 0 ? <div><i>No Teams</i></div> : null}
     <div>{teamsState.get('isFetching') ? 'Fetching...' : ''}</div>
     {teamsState.get('teams').map((team,i) => <Team key={i} team={team} />)}

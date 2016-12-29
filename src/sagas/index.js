@@ -9,6 +9,7 @@ function* getAllTeams() {
 }
 
 function* watchGetAllTeams() {
+  // TODO only allow one refresh one at a time? Or let state handle that?
   yield takeEvery('FETCH_TEAMS', getAllTeams)
 }
 
