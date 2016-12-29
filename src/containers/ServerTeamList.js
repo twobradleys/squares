@@ -1,15 +1,12 @@
 import { connect } from 'react-redux'
-import { fetchTeams, addTeam } from '../actions'
+import { fetchTeams, createTeam } from '../actions'
 import TeamList from '../components/TeamList'
 
 const mapStateToProps = (state) => ({
   teamsState: state.get('teams')
 })
 
-const mapDispatchToProps = {
-  fetchTeams: fetchTeams,
-  addTeam: addTeam
-}
+const mapDispatchToProps = { fetchTeams, createTeam }
 
 const ServerTeamList = connect(
   mapStateToProps,

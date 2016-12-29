@@ -18,6 +18,9 @@ const teams = handleActions({
                 .set('didInvalidate', false)
                 .set('lastUpdated', new Date())
   },
+  'ADD_TEAM_PROVISIONAL': (state, action) => {
+    return state.update('teams', teams => teams.push(Immutable.Map(action.payload)))
+  },
   // TODO unused
   'FETCH_TEAMS_STARTED': (state, action) => {
     return state.set('didInvalidate', true).set('isFetching', true)

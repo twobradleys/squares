@@ -28,5 +28,6 @@ export const fetchGames = createAction('FETCH_GAMES')
 
 export const invalidateTeams = createAction('INVALIDATE_TEAMS')
 export const fetchTeams = createAction('FETCH_TEAMS')
-export const addTeam = createAction('ADD_TEAM', name => ({name}))
+export const createTeam = createAction('CREATE_TEAM', name => ({name}))
 export const receiveTeams = createAction('RECEIVE_TEAMS')
+export const addTeamProvisional = createAction('ADD_TEAM_PROVISIONAL')

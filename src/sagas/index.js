@@ -13,11 +13,13 @@ function* watchGetAllTeams() {
 }
 
 function* createTeam(action) {
+  yield put(actions.addTeamProvisional(action.payload))
   yield call(api.createTeam, action.payload)
+  yield getAllTeams() // refresh
 }
 
 function* watchCreateTeam() {
-  yield takeEvery('ADD_TEAM', createTeam) // TODO consistant naming
+  yield takeEvery('CREATE_TEAM', createTeam)
 }
 
 export default function* root() {

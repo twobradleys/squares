@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import Team from './Team'
 
 // TODO dry out with GameList, make an EntityList component?
-const TeamList = ({ teamsState, fetchTeams, addTeam }) => (
+const TeamList = ({ teamsState, fetchTeams, createTeam }) => (
   <div className='FlexColumn'>
     <h1>Teams</h1>
     {teamsState.get('teams').size === 0 ? <div><i>No Teams</i></div> : null}
@@ -13,7 +13,7 @@ const TeamList = ({ teamsState, fetchTeams, addTeam }) => (
     <br />
     <div>Last Updated: {teamsState.get('lastUpdated') !== null ? teamsState.get('lastUpdated').toString() : 'never'}</div>
     <button onClick={fetchTeams}>Refresh</button>
-    <button onClick={() => addTeam(window.prompt("Team name?"))}>Add Team</button>
+    <button onClick={() => createTeam(window.prompt("Team name?"))}>Add Team</button>
   </div>
 )
 
@@ -30,7 +30,7 @@ TeamList.propTypes = {
     )
   }),
   fetchTeams: PropTypes.func.isRequired,
-  addTeam: PropTypes.func.isRequired
+  createTeam: PropTypes.func.isRequired
 }
 
 export default TeamList
