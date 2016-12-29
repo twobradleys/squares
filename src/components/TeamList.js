@@ -13,7 +13,7 @@ const TeamList = ({ teamsState, fetchTeams, addTeam }) => (
     <br />
     <div>Last Updated: {teamsState.get('lastUpdated') !== null ? teamsState.get('lastUpdated').toString() : 'never'}</div>
     <button onClick={fetchTeams}>Refresh</button>
-    <button onClick={() => addTeam({name: window.prompt("Team name?")})}>Add Team</button>
+    <button onClick={() => addTeam(window.prompt("Team name?"))}>Add Team</button>
   </div>
 )
 

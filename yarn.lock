@@ -4596,12 +4596,6 @@ reduce-reducers@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/reduce-reducers/-/reduce-reducers-0.1.2.tgz#fa1b4718bc5292a71ddd1e5d839c9bea9770f14b"
 
-redux-actions@^0.10.1:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/redux-actions/-/redux-actions-0.10.1.tgz#bb442ee37dd9643a94933e4071e089f435587135"
-  dependencies:
-    reduce-reducers "^0.1.0"
-
 redux-actions@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/redux-actions/-/redux-actions-1.2.0.tgz#4f421f1aa74c827d5e8abce6c009d5872c4af3e6"
@@ -4626,15 +4620,9 @@ redux-logger@^2.7.4:
   dependencies:
     deep-diff "0.3.4"
 
-redux-thunk-actions@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/redux-thunk-actions/-/redux-thunk-actions-1.0.0.tgz#3eeae876b85dae4bebf7e0057a371e277504856f"
-  dependencies:
-    redux-actions "^0.10.1"
-
-redux-thunk@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.1.0.tgz#c724bfee75dbe352da2e3ba9bc14302badd89a98"
+redux-saga@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.14.0.tgz#7792bcc9dc57e9ed2484daa95794b154ee472b24"
 
 redux@^3.6.0:
   version "3.6.0"
