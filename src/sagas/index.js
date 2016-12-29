@@ -12,10 +12,18 @@ function* watchGetAllTeams() {
   yield takeEvery('FETCH_TEAMS', getAllTeams)
 }
 
+function* createTeam(action) {
+  yield call(api.createTeam, action.payload)
+}
+
+function* watchCreateTeam() {
+  yield takeEvery('ADD_TEAM', createTeam) // TODO consistant naming
+}
+
 export default function* root() {
   yield [
     fork(getAllTeams), // fire this off once at initialization
-    fork(watchGetAllTeams)
-//    fork(watchCreateTeam)
+    fork(watchGetAllTeams),
+    fork(watchCreateTeam)
   ]
 }
