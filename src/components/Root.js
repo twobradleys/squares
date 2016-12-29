@@ -4,6 +4,7 @@ import { IndexRoute, Route, Router, browserHistory } from 'react-router'
 import App from './App'
 import ServerGameList from '../containers/ServerGameList'
 import ServerTeamList from '../containers/ServerTeamList'
+import PlayGame from '../components/PlayGame'
 import Home from '../components/Home'
 
 const Root = ({ store }) => (
@@ -13,6 +14,7 @@ const Root = ({ store }) => (
         <IndexRoute component={Home} />
         <Route path="/games" component={ServerGameList} />
         <Route path="/teams" component={ServerTeamList} />
+        <Route path="/play" component={PlayGame} />
       </Route>
     </Router>
   </Provider>
