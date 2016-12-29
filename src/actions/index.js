@@ -27,7 +27,6 @@ export const fetchGames = createAction('FETCH_GAMES')
 // TODO put these in own file?
 
 export const invalidateTeams = createAction('INVALIDATE_TEAMS')
-
 export const fetchTeams = createAction('FETCH_TEAMS')
-
 export const addTeam = createAction('ADD_TEAM', name => ({name}))
+export const receiveTeams = createAction('RECEIVE_TEAMS')
