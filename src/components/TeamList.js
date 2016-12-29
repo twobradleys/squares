@@ -7,9 +7,10 @@ import Team from './Team'
 const TeamList = ({ teamsState, fetchTeams, createTeam }) => (
   <div className='FlexColumn'>
     {teamsState.get('teams').size === 0 ? <div><i>No Teams</i></div> : null}
-    <div>{teamsState.get('isFetching') ? 'Fetching...' : ''}</div>
     {teamsState.get('teams').map((team,i) => <Team key={i} team={team} />)}
     <br />
+    {/* TODO only show fetching... if it has been up for 200ms+ (to avoid flashing) */}
+    <div>{teamsState.get('isFetching') ? 'Fetching...' : ''}</div>
     <div>Last Updated: {teamsState.get('lastUpdated') !== null ? teamsState.get('lastUpdated').toString() : 'never'}</div>
     <button onClick={fetchTeams}>Refresh</button>
     <button onClick={() => createTeam(window.prompt("Team name?"))}>Add Team</button>

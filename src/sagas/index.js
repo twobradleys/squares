@@ -1,4 +1,5 @@
 import { call, fork, put, takeEvery } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
 import { api } from '../services'
 import * as actions from '../actions'
 
@@ -8,9 +9,17 @@ function* getAllTeams() {
   // TODO error handling
 }
 
+// TODO rename to watchFetchTeams?
 function* watchGetAllTeams() {
   // TODO only allow one refresh one at a time? Or let state handle that?
   yield takeEvery('FETCH_TEAMS', getAllTeams)
+}
+
+function* periodicallyGetAllTeams() {
+  while (true) {
+    yield put(actions.fetchTeams())
+    yield call(delay, 2000)
+  }
 }
 
 function* createTeam(action) {
@@ -33,12 +42,20 @@ function* watchGetAllGames() {
   yield takeEvery('FETCH_GAMES', getAllGames)
 }
 
+// TODO start/stop these based on whether or not the list is visible
+function* periodicallyGetAllGames() {
+  while (true) {
+    yield put(actions.fetchGames())
+    yield call(delay, 2000)
+  }
+}
+
 export default function* root() {
   yield [
-    fork(getAllTeams),
+    fork(periodicallyGetAllTeams),
     fork(watchGetAllTeams),
     fork(watchCreateTeam),
-    fork(getAllGames),
+    fork(periodicallyGetAllGames),
     fork(watchGetAllGames),
   ]
 }

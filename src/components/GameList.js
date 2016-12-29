@@ -5,9 +5,9 @@ import Game from './Game'
 
 const GameList = ({ games, fetchGames }) => (
   <div className='FlexColumn'>
-    <div>{games.get('isFetching') ? 'Fetching...' : ''}</div>
     {games.get('items') === null ? <div><i>No Games</i></div> : games.get('items').map((game,i) => <Game key={i} game={game} />)}
     <br />
+    <div>{games.get('isFetching') ? 'Fetching...' : ''}</div>
     <div>Last Updated: {games.get('lastUpdated') !== null ? games.get('lastUpdated').toString() : 'never'}</div>
     <button onClick={fetchGames}>Refresh</button>
   </div>
