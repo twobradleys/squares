@@ -1,10 +1,10 @@
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { addPlayer } from '../actions';
+import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { addPlayer } from '../actions'
 
 let AddPlayer = ({ locked, addPlayer }) => {
   if (locked) {
-    return null;
+    return null
   } else {
     return (
       <div>
@@ -21,15 +21,15 @@ AddPlayer.propTypes = {
 
 const mapStateToProps = (state) => ({
   locked: state.getIn(['grid', 'locked'])
-});
+})
 
 const mapDispatchToProps = ({
   addPlayer: addPlayer
-});
+})
 
 AddPlayer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddPlayer);
+)(AddPlayer)
 
-export default AddPlayer;
+export default AddPlayer
