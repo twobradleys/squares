@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import Game from './Game'
 
 const GameList = ({ games, fetchGames }) => (
-  <div className='flexRow'>
+  <div className='FlexRow'>
     <h1>Games</h1>
     <div>{games.get('isFetching') ? 'Fetching...' : ''}</div>
     {games.get('items') === null ? <div><i>No Games</i></div> : games.get('items').map((game,i) => <Game key={i} game={game} />)}

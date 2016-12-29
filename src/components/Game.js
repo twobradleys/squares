@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
 const Game = ({ game }) => (
-  <div className='flexColumn'>
+  <div className='FlexColumn'>
     <div>{game.get('event_name')}</div>
   </div>
 )
