@@ -54,17 +54,22 @@ export function fetchGamesIfNeeded() {
 
 export const invalidateTeams = createAction('INVALIDATE_TEAMS')
 
-// NB: This actually generates FETCH_GAMES_STARTED, FETCH_GAMES_ENDED, and
-// FETCH_GAMES_FAILED. It *does not* generate FETCH_GAMES
 export const fetchTeams = createActionThunk('FETCH_TEAMS', () =>
   fetch('http://localhost:5200/v1/teams/by-sport/football').then(response => response.json())
 )
 
-export const addTeam = createActionThunk('ADD_TEAM', (name) =>
+// TODO this is a really weird call signature and feels nasty
+const postTeam = createActionThunk('POST_TEAM', ({name, thenFn}) =>
   fetch('http://localhost:5200/v1/team', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({name: name, sport: 'football'})
-  })
-  // then: team should appear in list (provisional), list should invalidate
+  }).then(thenFn)
 )
+
+// wrapper for postTeam that also triggers a refresh
+export function addTeam({name}) {
+  return (dispatch, getState) => {
+    dispatch(postTeam({name, thenFn: () => dispatch(fetchTeams())}))
+  }
+}

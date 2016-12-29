@@ -25,6 +25,11 @@ const teams = handleActions({
     // TODO figure out how to trigger/test this
     return state
   },
+  'POST_TEAM_STARTED': (state, action) => {
+    // append team to state array opportunistically
+    return state.set('didInvalidate', true)
+      .update('teams', teams => teams.push(Immutable.Map({name: action.payload[0].name, id: null})))
+  }
 }, initialState)
 
 export default teams

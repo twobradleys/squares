@@ -26,6 +26,7 @@ const store = createStore(
 )
 
 // Initialization actions
+// TODO call this periodically
 store.dispatch(fetchGamesIfNeeded())
 
 render(
