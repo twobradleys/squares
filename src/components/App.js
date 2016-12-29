@@ -24,12 +24,21 @@ const App = () => (
     <LockEntries />
   </div>
 )
-*/
+
 
 import ServerGameList from '../containers/ServerGameList'
 
 const App = () => (
   <ServerGameList />
 )
+
+*/
+
+import ServerTeamList from '../containers/ServerTeamList'
+
+const App = () => (
+  <ServerTeamList />
+)
+
 
 export default App

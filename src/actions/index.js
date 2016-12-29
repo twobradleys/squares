@@ -26,3 +26,22 @@ export const invalidateGames = createAction('INVALIDATE_GAMES')
 export const fetchGames = createActionThunk('FETCH_GAMES', () =>
   fetch('http://localhost:5200/v1/games').then(response => response.json())
 )
+
+// Teams
+// TODO put these in own file?
+
+export const invalidateTeams = createAction('INVALIDATE_TEAMS')
+
+// NB: This actually generates FETCH_GAMES_STARTED, FETCH_GAMES_ENDED, and
+// FETCH_GAMES_FAILED. It *does not* generate FETCH_GAMES
+export const fetchTeams = createActionThunk('FETCH_TEAMS', () =>
+  fetch('http://localhost:5200/v1/teams/by-sport/football').then(response => response.json())
+)
+
+export const addTeam = createActionThunk('ADD_TEAM', (name) =>
+  fetch('http://localhost:5200/v1/team', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({name: name, sport: 'football'})
+  })
+)
