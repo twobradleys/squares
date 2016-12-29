@@ -44,4 +44,5 @@ export const addTeam = createActionThunk('ADD_TEAM', (name) =>
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({name: name, sport: 'football'})
   })
+  // then: team should appear in list (provisional), list should invalidate
 )

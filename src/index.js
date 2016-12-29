@@ -6,10 +6,9 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import App from './components/App'
 import reducer from './reducers'
-
-import createLogger from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
-
+import { composeWithDevTools } from 'redux-devtools-extension'
+import createLogger from 'redux-logger'
 import { Iterable } from 'immutable'
 
 const loggerMiddleware = createLogger({
@@ -18,10 +17,11 @@ const loggerMiddleware = createLogger({
 })
 
 const store = createStore(
-  reducer,
-  applyMiddleware(
-    thunkMiddleware,
-    loggerMiddleware
+  reducer, composeWithDevTools(
+    applyMiddleware(
+      thunkMiddleware,
+      loggerMiddleware
+    )
   )
 )
 
