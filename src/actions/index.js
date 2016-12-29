@@ -27,6 +27,28 @@ export const fetchGames = createActionThunk('FETCH_GAMES', () =>
   fetch('http://localhost:5200/v1/games').then(response => response.json())
 )
 
+// Closely based on  http://redux.js.org/docs/advanced/AsyncActions.html
+function shouldFetchGames(state) {
+  const games = state.get('games')
+  if (games.get('items') === null) {
+    return true // Never loaded
+  } else if (games.get('isFetching')) {
+    return false // Don't do multiple fetches at the same time
+  } else {
+    return games.get('didInvalidate') // Only load if invalid
+  }
+}
+
+export function fetchGamesIfNeeded() {
+  return (dispatch, getState) => {
+    if (shouldFetchGames(getState())) {
+      return dispatch(fetchGames())
+    } else {
+      return Promise.resolve()
+    }
+  }
+}
+
 // Teams
 // TODO put these in own file?
 

@@ -3,27 +3,26 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 
 import Game from './Game'
 
-const GameList = ({ gamesState, fetchGames }) => (
+const GameList = ({ games, fetchGames }) => (
   <div className='flexRow'>
     <h1>Games</h1>
-    {gamesState.get('games').size === 0 ? <div><i>No Games</i></div> : null}
-    <div>{gamesState.get('isFetching') ? 'Fetching...' : ''}</div>
-    {gamesState.get('games').map((game,i) => <Game key={i} game={game} />)}
+    <div>{games.get('isFetching') ? 'Fetching...' : ''}</div>
+    {games.get('items') === null ? <div><i>No Games</i></div> : games.get('items').map((game,i) => <Game key={i} game={game} />)}
     <br />
-    <div>Last Updated: {gamesState.get('lastUpdated') !== null ? gamesState.get('lastUpdated').toString() : 'never'}</div>
+    <div>Last Updated: {games.get('lastUpdated') !== null ? games.get('lastUpdated').toString() : 'never'}</div>
     <button onClick={fetchGames}>Refresh</button>
   </div>
 )
 
 GameList.propTypes = {
-  gamesState: ImmutablePropTypes.contains({
+  games: ImmutablePropTypes.contains({
     isFetching: PropTypes.bool.isRequired,
     didInvalidate: PropTypes.bool.isRequired,
     lastUpdated: PropTypes.instanceOf(Date),
-    games: ImmutablePropTypes.listOf(
+    items: ImmutablePropTypes.listOf(
       ImmutablePropTypes.contains({
         event_name: PropTypes.string.isRequired
-      }).isRequired
+      })
     )
   }),
   fetchGames: PropTypes.func.isRequired

@@ -3,7 +3,7 @@ import { fetchGames } from '../actions'
 import GameList from '../components/GameList'
 
 const mapStateToProps = (state) => ({
-  gamesState: state.get('games')
+  games: state.get('games')
 })
 
 const mapDispatchToProps = {

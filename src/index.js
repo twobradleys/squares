@@ -9,7 +9,7 @@ import createLogger from 'redux-logger'
 import { Iterable } from 'immutable'
 import reducer from './reducers'
 import Root from './components/Root'
-
+import { fetchGamesIfNeeded } from './actions'
 
 const loggerMiddleware = createLogger({
   // Render Immutable.js more nicely in console logs
@@ -24,6 +24,9 @@ const store = createStore(
     )
   )
 )
+
+// Initialization actions
+store.dispatch(fetchGamesIfNeeded())
 
 render(
   <Root store={store} />,

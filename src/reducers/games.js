@@ -5,7 +5,7 @@ const initialState = Immutable.Map({
   isFetching: false,
   didInvalidate: false,
   lastUpdated: null,
-  games: Immutable.List([]),
+  items: null
 })
 
 const games = handleActions({
@@ -16,7 +16,7 @@ const games = handleActions({
     return state.set('didInvalidate', true).set('isFetching', true)
   },
   'FETCH_GAMES_ENDED': (state, action) => {
-    return state.set('games', Immutable.fromJS(action.payload))
+    return state.set('items', Immutable.fromJS(action.payload))
                 .set('isFetching', false)
                 .set('didInvalidate', false)
                 .set('lastUpdated', new Date())
