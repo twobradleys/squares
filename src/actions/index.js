@@ -16,16 +16,12 @@ export const lockEntries = createAction('LOCK_ENTRIES', () => ({digitSeeds: Immu
 
 // Games
 // TODO put these in own file?
-
 export const invalidateGames = createAction('INVALIDATE_GAMES')
-
-// NB: This actually generates FETCH_GAMES_STARTED, FETCH_GAMES_ENDED, and
-// FETCH_GAMES_FAILED. It *does not* generate FETCH_GAMES
 export const fetchGames = createAction('FETCH_GAMES')
+export const receiveGames = createAction('RECEIVE_GAMES')
 
 // Teams
 // TODO put these in own file?
-
 // TODO invalidations are unused, keep them around?
 export const invalidateTeams = createAction('INVALIDATE_TEAMS')
 export const fetchTeams = createAction('FETCH_TEAMS')

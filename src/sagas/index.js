@@ -22,10 +22,22 @@ function* watchCreateTeam() {
   yield takeEvery('CREATE_TEAM', createTeam)
 }
 
+function* getAllGames() {
+  const games = yield call(api.getGames)
+  yield put(actions.receiveGames(games))
+  // TODO error handling
+}
+
+function* watchGetAllGames() {
+  yield takeEvery('FETCH_GAMES', getAllGames)
+}
+
 export default function* root() {
   yield [
-    fork(getAllTeams), // fire this off once at initialization
+    fork(getAllTeams),
     fork(watchGetAllTeams),
-    fork(watchCreateTeam)
+    fork(watchCreateTeam),
+    fork(getAllGames),
+    fork(watchGetAllGames),
   ]
 }

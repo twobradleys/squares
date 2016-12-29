@@ -12,19 +12,15 @@ const games = handleActions({
   'INVALIDATE_GAMES': (state, action) => {
     return state.set('didInvalidate', true)
   },
-  'FETCH_GAMES_STARTED': (state, action) => {
+  'FETCH_GAMES': (state, action) => {
     return state.set('didInvalidate', true).set('isFetching', true)
   },
-  'FETCH_GAMES_ENDED': (state, action) => {
+  'RECEIVE_GAMES': (state, action) => {
     return state.set('items', Immutable.fromJS(action.payload))
                 .set('isFetching', false)
                 .set('didInvalidate', false)
                 .set('lastUpdated', new Date())
-  },
-  'FETCH_GAMES_FAILED': (state, action) => {
-    // TODO figure out how to trigger/test this
-    return state
-  },
+  }
 }, initialState)
 
 export default games

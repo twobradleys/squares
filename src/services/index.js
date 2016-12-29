@@ -10,5 +10,9 @@ export const api = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({name, sport: 'football'})
-    })
+    }),
+
+  getGames: () =>
+    fetch('http://localhost:5200/v1/games')
+    .then(response => response.json()),
 }

@@ -12,6 +12,9 @@ const teams = handleActions({
   'INVALIDATE_TEAMS': (state, action) => {
     return state.set('didInvalidate', true)
   },
+  'FETCH_TEAMS': (state, action) => {
+    return state.set('didInvalidate', true).set('isFetching', true)
+  },
   'RECEIVE_TEAMS': (state, action) => {
     return state.set('teams', Immutable.fromJS(action.payload))
                 .set('isFetching', false)
@@ -20,10 +23,7 @@ const teams = handleActions({
   },
   'ADD_TEAM_PROVISIONAL': (state, action) => {
     return state.update('teams', teams => teams.push(Immutable.Map(action.payload)))
-  },
-  'FETCH_TEAMS': (state, action) => {
-    return state.set('didInvalidate', true).set('isFetching', true)
-  },
+  }
 }, initialState)
 
 export default teams
