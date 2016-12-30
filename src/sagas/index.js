@@ -50,12 +50,51 @@ function* periodicallyGetAllGames() {
   }
 }
 
+
+// players
+
+function* getAllPlayers() {
+  try {
+    const players = yield call(api.getPlayers)
+    yield put(actions.receivePlayers(players))
+  } catch (error) {
+    yield put(actions.receivePlayersFailed(error))
+  }
+}
+
+// TODO rename to watchFetchPlayers?
+function* watchGetAllPlayers() {
+  // TODO only allow one refresh one at a time? Or let state handle that?
+  yield takeEvery('FETCH_PLAYERS', getAllPlayers)
+}
+
+function* periodicallyGetAllPlayers() {
+  while (true) {
+    yield put(actions.fetchPlayers())
+    yield call(delay, 2000)
+  }
+}
+
+function* createPlayer(action) {
+  yield put(actions.addPlayerProvisional(action.payload))
+  yield call(api.createPlayer, action.payload)
+  yield put(actions.fetchPlayers()) // refresh
+}
+
+function* watchCreatePlayer() {
+  yield takeEvery('CREATE_PLAYER', createPlayer)
+}
+
 export default function* root() {
   yield [
-    fork(periodicallyGetAllTeams),
+    // TODO sort these
+    //fork(periodicallyGetAllPlayers),
+    fork(watchGetAllPlayers),
+    fork(watchCreatePlayer),
+    //fork(periodicallyGetAllTeams),
     fork(watchGetAllTeams),
     fork(watchCreateTeam),
-    fork(periodicallyGetAllGames),
+//    fork(periodicallyGetAllGames),
     fork(watchGetAllGames),
   ]
 }

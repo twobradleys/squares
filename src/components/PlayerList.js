@@ -1,31 +1,36 @@
 import React, { PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
+
 import Player from './Player'
 
-const PlayerList = ({ players, pickingPlayerId, onPlayerClick }) => (
-  <div className='PlayerList'>
-    <h1>Players</h1>
-    <div style={{display: 'flex', flexDirection: 'row'}}>
-      {players.map(player =>
-        <Player
-          key={player.get('id')}
-          id={player.get('id')}
-          name={player.get('name')}
-          picking={pickingPlayerId === player.get('id')}
-          onClick={() => onPlayerClick(player.get('id'))}
-         />
-      )}
-    </div>
+// TODO dry out with GameList and TeamList
+const PlayerList = ({ playersState, fetchPlayers, createPlayer }) => (
+  <div className='FlexColumn'>
+    {playersState.get('players').size === 0 ? <div><i>No Players</i></div> : null}
+    {playersState.get('players').map((player,i) => <Player key={i} player={player} />)}
+    <br />
+    {/* TODO only show fetching... if it has been up for 200ms+ (to avoid flashing) */}
+    <div>{playersState.get('isFetching') ? 'Fetching...' : ''}</div>
+    <div>Last Updated: {playersState.get('lastUpdated') !== null ? playersState.get('lastUpdated').toString() : 'never'}</div>
+    <button onClick={fetchPlayers}>Refresh</button>
+    <button onClick={() => createPlayer(window.prompt("Player name?"))}>Add Player</button>
   </div>
 )
 
 PlayerList.propTypes = {
-  players: ImmutablePropTypes.listOf(ImmutablePropTypes.contains({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired
-  }).isRequired).isRequired,
-  pickingPlayerId: PropTypes.number,
-  onPlayerClick: PropTypes.func.isRequired
+  playersState: ImmutablePropTypes.contains({
+    isFetching: PropTypes.bool.isRequired,
+    didInvalidate: PropTypes.bool.isRequired,
+    lastUpdated: PropTypes.instanceOf(Date),
+    players: ImmutablePropTypes.listOf(
+      ImmutablePropTypes.contains({
+        id: PropTypes.string,
+        handle: PropTypes.string.isRequired
+      }).isRequired
+    )
+  }),
+  fetchPlayers: PropTypes.func.isRequired,
+  createPlayer: PropTypes.func.isRequired
 }
 
 export default PlayerList

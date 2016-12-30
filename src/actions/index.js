@@ -14,15 +14,24 @@ export const clickGridSquare = createAction('CLICK_GRID_SQUARE') // Payload is a
 export const makeQuickPicks = createAction('MAKE_QUICK_PICKS', count => ({count, seed: Math.random()}))
 export const lockEntries = createAction('LOCK_ENTRIES', () => ({digitSeeds: Immutable.Map({home: Math.random(), away: Math.random()})}))
 
+// TODO put each of these in own file?
+// TODO invalidations are unused, keep them around?
+
+
 // Games
-// TODO put these in own file?
 export const invalidateGames = createAction('INVALIDATE_GAMES')
 export const fetchGames = createAction('FETCH_GAMES')
 export const receiveGames = createAction('RECEIVE_GAMES')
 
+// Players
+export const invalidatePlayers = createAction('INVALIDATE_PLAYERS')
+export const fetchPlayers = createAction('FETCH_PLAYERS')
+export const createPlayer = createAction('CREATE_PLAYER', handle => ({handle}))
+export const receivePlayers = createAction('RECEIVE_PLAYERS')
+export const addPlayerProvisional = createAction('ADD_PLAYER_PROVISIONAL')
+export const receivePlayersFailed = createAction('RECEIVE_PLAYERS_FAILED')
+
 // Teams
-// TODO put these in own file?
-// TODO invalidations are unused, keep them around?
 export const invalidateTeams = createAction('INVALIDATE_TEAMS')
 export const fetchTeams = createAction('FETCH_TEAMS')
 export const createTeam = createAction('CREATE_TEAM', name => ({name}))

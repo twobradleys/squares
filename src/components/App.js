@@ -6,9 +6,9 @@ import './App.css'
 const App = ({ children }) => (
   <div className="FlexColumn">
     <div className="FlexRow" style={{justifyContent: 'space-around'}}>
-      <div><Link to="/teams">Teams</Link></div>
       <div><Link to="/games">Games</Link></div>
-      <div><Link to="/play">Play!</Link></div>
+      <div><Link to="/players">Players</Link></div>
+      <div><Link to="/teams">Teams</Link></div>
     </div>
     {children}
   </div>

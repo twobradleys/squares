@@ -1,15 +1,18 @@
 import React, { PropTypes } from 'react'
-import Cell from './Cell'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 
-const Player = ({ id, name, picking, onClick }) => (
-  <Cell active={picking} onClick={onClick} contents={name}></Cell>
+const Player = ({ player }) => (
+  <div className='FlexRow' style={{justifyContent: 'space-between'}}>
+    <div>{player.get('handle')}</div>
+    <div><pre style={{fontSize: 10, margin: 0}}>{player.get('id') || '(pending)'}</pre></div>
+  </div>
 )
 
 Player.propTypes = {
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  picking: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired
+  player: ImmutablePropTypes.contains({
+    id: PropTypes.string,
+    handle: PropTypes.string.isRequired,
+  }).isRequired
 }
 
 export default Player

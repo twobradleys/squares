@@ -3,8 +3,8 @@ import { Provider } from 'react-redux'
 import { IndexRoute, Route, Router, browserHistory } from 'react-router'
 import App from './App'
 import ServerGameList from '../containers/ServerGameList'
+import ServerPlayerList from '../containers/ServerPlayerList'
 import ServerTeamList from '../containers/ServerTeamList'
-import PlayGame from '../components/PlayGame'
 import Home from '../components/Home'
 
 const Root = ({ store }) => (
@@ -13,8 +13,8 @@ const Root = ({ store }) => (
       <Route path="/" component={App}>
         <IndexRoute component={Home} />
         <Route path="/games" component={ServerGameList} />
+        <Route path="/players" component={ServerPlayerList} />
         <Route path="/teams" component={ServerTeamList} />
-        <Route path="/play" component={PlayGame} />
       </Route>
     </Router>
   </Provider>
