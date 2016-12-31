@@ -41,7 +41,7 @@ function* periodicallyFetchEntities(entityType) {
   // TODO start/stop these based on whether or not the list is visible
   while (true) {
     yield put(actions.fetchEntities({entityType}))
-    yield call(delay, 2000)
+    yield call(delay, 3000) // TODO stagger
   }
 }
 
@@ -50,7 +50,8 @@ export default function* root() {
   yield [
     fork(handleCreateEntity),
     fork(handleFetchEntities),
-//    fork(periodicallyFetchEntities, 'players'),
-    //fork(periodicallyFetchEntities, 'teams'),
+    fork(periodicallyFetchEntities, 'games'),
+    fork(periodicallyFetchEntities, 'players'),
+    fork(periodicallyFetchEntities, 'teams'),
   ]
 }
