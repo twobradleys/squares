@@ -5,7 +5,7 @@ const initialState = Immutable.Map({
   isFetching: false,
   didInvalidate: false,
   lastUpdated: null,
-  teams: Immutable.List([])
+  items: null
 })
 
 const teams = handleActions({

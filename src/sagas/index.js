@@ -85,16 +85,51 @@ function* watchCreatePlayer() {
   yield takeEvery('CREATE_PLAYER', createPlayer)
 }
 
+// entities
+function* fetchEntities(action) {
+  const entityType = action.payload.entityType
+
+  try {
+    const items = yield call(api[entityType].fetch)
+    yield put(actions.receiveEntities({entityType, items}))
+  } catch (error) {
+    yield put(actions.receiveEntitiesFailed({entityType, error}))
+  }
+}
+
+function* createEntity(action) {
+  const payload = action.payload
+  const entityType = payload.entityType
+  yield put(actions.addEntityProvisional(payload))
+  yield call(api[entityType].create, action.payload.newEntity)
+  yield put(actions.fetchEntities({entityType})) // refresh
+}
+
+// core logic
+
+// handlers
+function* handleFetchEntities() {
+  // TODO only allow one refresh one at a time? Or let state handle that?
+  yield takeEvery('FETCH_ENTITIES', fetchEntities)
+}
+
+function* handleCreateEntity() {
+  yield takeEvery('CREATE_ENTITY', createEntity)
+}
+
 export default function* root() {
   yield [
+    fork(handleCreateEntity),
+    fork(handleFetchEntities),
+
     // TODO sort these
     //fork(periodicallyGetAllPlayers),
-    fork(watchGetAllPlayers),
-    fork(watchCreatePlayer),
+//    fork(watchGetAllPlayers),
+    //fork(watchCreatePlayer),
     //fork(periodicallyGetAllTeams),
-    fork(watchGetAllTeams),
-    fork(watchCreateTeam),
+    //fork(watchGetAllTeams),
+    //fork(watchCreateTeam),
 //    fork(periodicallyGetAllGames),
-    fork(watchGetAllGames),
+    //fork(watchGetAllGames),
   ]
 }
