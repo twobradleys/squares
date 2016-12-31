@@ -86,6 +86,9 @@ function* watchCreatePlayer() {
 }
 
 // entities
+
+// api call dispatches
+
 function* fetchEntities(action) {
   const entityType = action.payload.entityType
 
@@ -105,9 +108,8 @@ function* createEntity(action) {
   yield put(actions.fetchEntities({entityType})) // refresh
 }
 
-// core logic
-
 // handlers
+
 function* handleFetchEntities() {
   // TODO only allow one refresh one at a time? Or let state handle that?
   yield takeEvery('FETCH_ENTITIES', fetchEntities)
@@ -117,10 +119,20 @@ function* handleCreateEntity() {
   yield takeEvery('CREATE_ENTITY', createEntity)
 }
 
+// timer
+
+function* periodicallyFetchEntities(entityType) {
+  while (true) {
+    yield put(actions.fetchEntities({entityType}))
+    yield call(delay, 2000)
+  }
+}
+
 export default function* root() {
   yield [
     fork(handleCreateEntity),
     fork(handleFetchEntities),
+    fork(periodicallyFetchEntities, 'players'),
 
     // TODO sort these
     //fork(periodicallyGetAllPlayers),
