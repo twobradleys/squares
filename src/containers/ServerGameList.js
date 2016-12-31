@@ -1,13 +1,15 @@
 import { connect } from 'react-redux'
-import { fetchGames } from '../actions'
+import { fetchEntities } from '../actions'
 import GameList from '../components/GameList'
 
+const entityType = 'games'
+
 const mapStateToProps = (state) => ({
-  games: state.get('games')
+  gamesState: state.getIn(['entities', entityType])
 })
 
 const mapDispatchToProps = {
-  fetchGames: fetchGames
+  fetchGames: () => fetchEntities({entityType})
 }
 
 const ServerGameList = connect(

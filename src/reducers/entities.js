@@ -8,7 +8,10 @@ const initialEntityState = Immutable.Map({
 })
 
 const initialState = Immutable.Map({
-  players: initialEntityState
+  // TODO do i need to dup these? shouldn't have to but maybe this creates coupling?
+  games: initialEntityState,
+  players: initialEntityState,
+  teams: initialEntityState,
 })
 
 const entities = handleActions({

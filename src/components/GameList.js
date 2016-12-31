@@ -3,20 +3,19 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 
 import Game from './Game'
 
-const GameList = ({ games, fetchGames }) => (
+const GameList = ({ gamesState, fetchGames }) => (
   <div className='FlexColumn'>
-    {games.get('items') === null ? <div><i>No Games</i></div> : games.get('items').map((game,i) => <Game key={i} game={game} />)}
+    {gamesState.get('items') === null ? <div><i>No Games</i></div> : gamesState.get('items').map((game,i) => <Game key={i} game={game} />)}
     <br />
-    <div>{games.get('isFetching') ? 'Fetching...' : ''}</div>
-    <div>Last Updated: {games.get('lastUpdated') !== null ? games.get('lastUpdated').toString() : 'never'}</div>
+    <div>{gamesState.get('isFetching') ? 'Fetching...' : ''}</div>
+    <div>Last Updated: {gamesState.get('lastUpdated') !== null ? gamesState.get('lastUpdated').toString() : 'never'}</div>
     <button onClick={fetchGames}>Refresh</button>
   </div>
 )
 
 GameList.propTypes = {
-  games: ImmutablePropTypes.contains({
+  gamesState: ImmutablePropTypes.contains({
     isFetching: PropTypes.bool.isRequired,
-    didInvalidate: PropTypes.bool.isRequired,
     lastUpdated: PropTypes.instanceOf(Date),
     items: ImmutablePropTypes.listOf(
       ImmutablePropTypes.contains({

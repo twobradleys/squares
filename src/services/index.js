@@ -1,6 +1,12 @@
 import fetch from 'isomorphic-fetch'
 
 export const api = {
+  games: {
+    fetch: () =>
+      fetch('http://localhost:5200/v1/games')
+      .then(response => response.json()),
+  },
+
   players: {
     fetch: () =>
       fetch('http://localhost:5200/v1/players')
@@ -11,28 +17,26 @@ export const api = {
           throw new Error(response)
         }
       }),
-    create: (player) =>
+
+    create: ({handle}) =>
       fetch('http://localhost:5200/v1/player', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(player)
+        body: JSON.stringify({handle})
       })
   },
 
+  teams: {
+    fetch: () =>
+      fetch('http://localhost:5200/v1/teams/by-sport/football')
+      .then(response => response.json()),
 
-  getGames: () =>
-    fetch('http://localhost:5200/v1/games')
-    .then(response => response.json()),
+    create: ({name}) =>
+      fetch('http://localhost:5200/v1/team', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name, sport: 'football'})
+      }),
 
-  getTeams: () =>
-    fetch('http://localhost:5200/v1/teams/by-sport/football')
-    .then(response => response.json()),
-
-  createTeam: ({name}) =>
-    fetch('http://localhost:5200/v1/team', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({name, sport: 'football'})
-    }),
-
+  },
 }

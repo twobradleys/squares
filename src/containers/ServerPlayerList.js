@@ -5,8 +5,8 @@ import PlayerList from '../components/PlayerList'
 const entityType = 'players'
 
 const mapStateToProps = (state) => ({
-  // TODO wrap this in a selector, break into multiple fields
-  playersState: state.getIn(['entities', 'players']),
+  // TODO break into multiple fields
+  playersState: state.getIn(['entities', entityType]),
 })
 
 const mapDispatchToProps = {
