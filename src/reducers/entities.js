@@ -1,20 +1,6 @@
 import Immutable from 'immutable'
 import { handleActions } from 'redux-actions'
 
-/*
-* State shape (all immutable):
-*
-* {
-*  entities: {
-*   players: {
-*    isFetching: true/false,
-*    lastUpdated: Date,
-*    items: [..items..]
-*   }
-*  }
-* }
-*/
-
 const initialEntityState = Immutable.Map({
   isFetching: false,
   lastUpdated: null,
