@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { fetchEntities, createEntity } from '../actions'
+import { fetchEntities, createEntity, signIn } from '../actions'
 import PlayerList from '../components/PlayerList'
 
 const entityType = 'players'
@@ -12,6 +12,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   fetchPlayers: () => fetchEntities({entityType}),
   createPlayer: (newEntity) => createEntity({entityType, newEntity}),
+  signIn: signIn,
 }
 
 const ServerPlayerList = connect(

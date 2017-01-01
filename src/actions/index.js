@@ -19,5 +19,6 @@ export const clickGridSquare = createAction('CLICK_GRID_SQUARE') // Payload is a
 export const makeQuickPicks = createAction('MAKE_QUICK_PICKS', count => ({count, seed: Math.random()}))
 export const lockEntries = createAction('LOCK_ENTRIES', () => ({digitSeeds: Immutable.Map({home: Math.random(), away: Math.random()})}))
 
-// TODO put each of these in own file?
-// TODO invalidations are unused, keep them around?
+
+// Session state
+export const signIn = createAction('SIGN_IN')

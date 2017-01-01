@@ -4,10 +4,10 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import Player from './Player'
 
 // TODO dry out with GameList and TeamList
-const PlayerList = ({ playersState, fetchPlayers, createPlayer }) => (
+const PlayerList = ({ playersState, fetchPlayers, createPlayer, signIn }) => (
   <div className='FlexColumn'>
     {playersState.get('items').size === 0 ? <div><i>No Players</i></div> : null}
-    {playersState.get('items').map((player,i) => <Player key={i} player={player} />)}
+    {playersState.get('items').map((player,i) => <Player key={i} player={player} signIn={signIn} />)}
     <br />
     {/* TODO only show fetching... if it has been up for 200ms+ (to avoid flashing) */}
     <div>{playersState.get('isFetching') ? 'Fetching...' : ''}</div>
@@ -29,7 +29,8 @@ PlayerList.propTypes = {
     )
   }),
   fetchPlayers: PropTypes.func.isRequired,
-  createPlayer: PropTypes.func.isRequired
+  createPlayer: PropTypes.func.isRequired,
+  signIn: PropTypes.func.isRequired
 }
 
 export default PlayerList
