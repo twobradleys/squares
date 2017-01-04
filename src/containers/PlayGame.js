@@ -4,7 +4,8 @@ import { fetchCellsForGame } from '../actions'
 import GameBoard from '../components/GameBoard'
 
 const mapStateToProps = (state) => ({
-  game: getCurrentGame(state)
+  game: getCurrentGame(state),
+  current_player_id: state.getIn(['session', 'playerId'])
 })
 
 const mapDispatchToProps = ({ fetchCellsForGame })

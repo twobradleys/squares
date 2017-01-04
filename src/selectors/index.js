@@ -10,7 +10,7 @@ export const getCellsInGrid = createSelector(
     const dims = Immutable.Range(0, 10).toList()
     const emptyGrid = dims.map(() => dims.map(() => Immutable.Map()))
     return cells.reduce((grid, cell) =>
-      grid.setIn([cell.get('home_index'), cell.get('away_index')], cell)
+      grid.setIn([cell.get('away_index'), cell.get('home_index')], cell)
                       , emptyGrid)
   }
 )

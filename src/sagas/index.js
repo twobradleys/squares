@@ -3,6 +3,8 @@ import { delay } from 'redux-saga'
 import { api } from '../services'
 import * as actions from '../actions'
 
+import Immutable from 'immutable'
+
 // api call wrappers
 
 function* fetchEntities(action) {
@@ -33,6 +35,19 @@ function* fetchCellsForGame(action) {
   yield put(actions.receiveEntities({entityType, items})) // TODO need to stash these by game id?
 }
 
+function* clickEntryCell(action) {
+  const away_index = action.payload.get('away_index')
+  const home_index = action.payload.get('home_index')
+  const player_id =  action.payload.get('player_id')
+  const price = 51 // TODO
+  const type = 'buy'
+  const game_id = action.payload.get('game_id')
+
+  // TODO buy square provisionally
+  yield call(api.offers.create, {game_id, home_index, away_index, player_id, price, type})
+  yield put(actions.fetchCellsForGame(Immutable.Map({id: game_id})))
+}
+
 // action handlers
 
 function* handleFetchEntities() {
@@ -49,9 +64,14 @@ function* handleFetchCellsForGame() {
   yield takeEvery('FETCH_CELLS_FOR_GAME', fetchCellsForGame)
 }
 
-// slight hack
+// slight hack - we are using a "nav" change to fire off a fetch event as a side effect. better way to do this?
 function* handleJoinGame() {
   yield takeEvery('JOIN_GAME', fetchCellsForGame)
+}
+
+// TODO push click up to the view layer and change this to "buy" / "sell" / whatever
+function* handleClickEntryCell() {
+  yield takeEvery('CLICK_ENTRY_CELL', clickEntryCell)
 }
 
 // timers
@@ -75,6 +95,7 @@ export default function* root() {
     fork(handleFetchEntities),
     fork(handleFetchCellsForGame),
     fork(handleJoinGame),
+    fork(handleClickEntryCell),
     fork(periodicallyFetchEntities, 'games'),
     fork(periodicallyFetchEntities, 'players'),
     fork(periodicallyFetchEntities, 'teams'),

@@ -27,18 +27,20 @@ const PlayGame = () => (
 
 import Grid from './Grid'
 
-const GameBoard = ({ game, fetchCellsForGame }) => (
+const GameBoard = ({ game, current_player_id, fetchCellsForGame }) => (
   <div>
     <h1>{game.get('event_name')}</h1>
     <button onClick={() => fetchCellsForGame(game)}>Load cells</button>
-    <Grid />
+    <Grid current_player_id={current_player_id} game_id={game.get('id')} />
   </div>
 )
 
 GameBoard.propTypes = {
   game: ImmutablePropTypes.contains({
+    id: PropTypes.string.isRequired,
     event_name: PropTypes.string.isRequired
   }).isRequired,
+  current_player_id: PropTypes.string.isRequired,
   fetchCellsForGame: PropTypes.func.isRequired
 }
 

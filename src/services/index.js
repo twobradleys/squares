@@ -13,6 +13,15 @@ export const api = {
       .then(response => response.json()),
   },
 
+  offers: {
+    create: ({game_id, home_index, away_index, player_id, price, type}) =>
+      fetch(`http://localhost:5200/v1/offer/${game_id}/by-index/${home_index}/${away_index}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({away_index, home_index, player_id, price, type})
+      })
+  },
+
   players: {
     fetch: () =>
       fetch('http://localhost:5200/v1/players')
