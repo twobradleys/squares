@@ -1,4 +1,4 @@
-import { call, fork, put, takeEvery } from 'redux-saga/effects'
+import { call, cancel, fork, put, takeEvery } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import { api } from '../services'
 import * as actions from '../actions'
@@ -9,7 +9,9 @@ function* fetchEntities(action) {
   const entityType = action.payload.entityType
 
   try {
+    const fetchTimerTask = yield fork(startFetchTimer, {entityType})
     const items = yield call(api[entityType].fetch)
+    yield cancel(fetchTimerTask)
     yield put(actions.receiveEntities({entityType, items}))
   } catch (error) {
     yield put(actions.receiveEntitiesFailed({entityType, error}))
@@ -62,6 +64,10 @@ function* periodicallyFetchEntities(entityType) {
   }
 }
 
+function* startFetchTimer({entityType}) {
+  yield call(delay, 200)
+  yield put(actions.waitingForFetchEntities({entityType}))
+}
 
 export default function* root() {
   yield [
@@ -69,8 +75,9 @@ export default function* root() {
     fork(handleFetchEntities),
     fork(handleFetchCellsForGame),
     fork(handleJoinGame),
-//    fork(periodicallyFetchEntities, 'games'),
-    //fork(periodicallyFetchEntities, 'players'),
-    //fork(periodicallyFetchEntities, 'teams'),
+    fork(periodicallyFetchEntities, 'games'),
+    fork(periodicallyFetchEntities, 'players'),
+    fork(periodicallyFetchEntities, 'teams'),
+    // TODO poll cells
   ]
 }

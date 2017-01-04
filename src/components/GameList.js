@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
-
+import EntityLastUpdated from './EntityLastUpdated'
 import Game from './Game'
 
 const GameList = ({ gamesState, fetchGames, joinGame }) => (
@@ -8,7 +8,7 @@ const GameList = ({ gamesState, fetchGames, joinGame }) => (
     {gamesState.get('items') === null ? <div><i>No Games</i></div> : gamesState.get('items').map((game,i) => <Game key={i} game={game} joinGame={joinGame} />)}
     <br />
     <div>{gamesState.get('isFetching') ? 'Fetching...' : ''}</div>
-    <div>Last Updated: {gamesState.get('lastUpdated') !== null ? gamesState.get('lastUpdated').toString() : 'never'}</div>
+    <EntityLastUpdated lastUpdated={gamesState.get('lastUpdated')} />
     <button onClick={fetchGames}>Refresh</button>
   </div>
 )

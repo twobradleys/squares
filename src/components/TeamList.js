@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
-
+import EntityLastUpdated from './EntityLastUpdated'
 import Team from './Team'
 
 // TODO dry out with GameList, make an EntityList component?
@@ -11,7 +11,7 @@ const TeamList = ({ teamsState, fetchTeams, createTeam }) => (
     <br />
     {/* TODO only show fetching... if it has been up for 200ms+ (to avoid flashing) */}
     <div>{teamsState.get('isFetching') ? 'Fetching...' : ''}</div>
-    <div>Last Updated: {teamsState.get('lastUpdated') !== null ? teamsState.get('lastUpdated').toString() : 'never'}</div>
+    <EntityLastUpdated lastUpdated={teamsState.get('lastUpdated')} />
     <button onClick={fetchTeams}>Refresh</button>
     <button onClick={() => createTeam({name: window.prompt("Team name?")})}>Add Team</button>
   </div>

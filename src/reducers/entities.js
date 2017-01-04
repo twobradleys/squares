@@ -16,7 +16,8 @@ const initialState = Immutable.Map({
 })
 
 const entities = handleActions({
-  'FETCH_ENTITIES': (state, action) =>
+  // TODO generalize to all API calls
+  'WAITING_FOR_FETCH_ENTITIES': (state, action) =>
     state.update(action.payload.entityType, entities =>
       entities.set('isFetching', true)),
 

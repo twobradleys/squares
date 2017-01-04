@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
-
+import EntityLastUpdated from './EntityLastUpdated'
 import Player from './Player'
 
 // TODO dry out with GameList and TeamList
@@ -11,7 +11,7 @@ const PlayerList = ({ playersState, fetchPlayers, createPlayer, signIn }) => (
     <br />
     {/* TODO only show fetching... if it has been up for 200ms+ (to avoid flashing) */}
     <div>{playersState.get('isFetching') ? 'Fetching...' : ''}</div>
-    <div>Last Updated: {playersState.get('lastUpdated') !== null ? playersState.get('lastUpdated').toString() : 'never'}</div>
+    <EntityLastUpdated lastUpdated={playersState.get('lastUpdated')} />
     <button onClick={fetchPlayers}>Refresh</button>
     <button onClick={() => createPlayer({handle: window.prompt("Player name?")})}>Add Player</button>
   </div>
