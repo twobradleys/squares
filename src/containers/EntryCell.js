@@ -7,10 +7,9 @@ import Cell from '../components/Cell'
 const mapStateToProps = (state, ownProps) => {
   const cellsInGrid = getCellsInGrid(state)
   const entry = cellsInGrid.getIn([ownProps.i, ownProps.j])
-  const ownerHandle = entry.get(['player', 'handle'])
+  const ownerHandle = entry.getIn(['player', 'handle'])
 
   return {
-    entry: entry,
     contents: (ownerHandle === 'house') ? '💵' : ownerHandle,
     active: false
   }
