@@ -1,6 +1,12 @@
 import fetch from 'isomorphic-fetch'
 
 export const api = {
+  cells: {
+    fetch: ({id}) =>
+      fetch('http://localhost:5200/v1/cells/by-game/' + id)
+      .then(response => response.json()),
+  },
+
   games: {
     fetch: () =>
       fetch('http://localhost:5200/v1/games')

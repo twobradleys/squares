@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { fetchEntities } from '../actions'
+import { fetchEntities, joinGame } from '../actions'
 import GameList from '../components/GameList'
 
 const entityType = 'games'
@@ -9,7 +9,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-  fetchGames: () => fetchEntities({entityType})
+  fetchGames: () => fetchEntities({entityType}),
+  joinGame: joinGame,
 }
 
 const ServerGameList = connect(

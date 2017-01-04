@@ -24,6 +24,13 @@ function* createEntity(action) {
   yield put(actions.fetchEntities({entityType})) // refresh
 }
 
+function* fetchCellsForGame(action) {
+  const id = action.payload.get('id')
+  const items = yield call(api.cells.fetch, {id})
+  const entityType = 'cells'
+  yield put(actions.receiveEntities({entityType, items})) // TODO need to stash these by game id?
+}
+
 // action handlers
 
 function* handleFetchEntities() {
@@ -33,6 +40,16 @@ function* handleFetchEntities() {
 
 function* handleCreateEntity() {
   yield takeEvery('CREATE_ENTITY', createEntity)
+}
+
+function* handleFetchCellsForGame() {
+  // TODO DRY out
+  yield takeEvery('FETCH_CELLS_FOR_GAME', fetchCellsForGame)
+}
+
+// slight hack
+function* handleJoinGame() {
+  yield takeEvery('JOIN_GAME', fetchCellsForGame)
 }
 
 // timers
@@ -50,8 +67,10 @@ export default function* root() {
   yield [
     fork(handleCreateEntity),
     fork(handleFetchEntities),
-    fork(periodicallyFetchEntities, 'games'),
-    fork(periodicallyFetchEntities, 'players'),
-    fork(periodicallyFetchEntities, 'teams'),
+    fork(handleFetchCellsForGame),
+    fork(handleJoinGame),
+//    fork(periodicallyFetchEntities, 'games'),
+    //fork(periodicallyFetchEntities, 'players'),
+    //fork(periodicallyFetchEntities, 'teams'),
   ]
 }

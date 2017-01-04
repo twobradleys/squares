@@ -3,9 +3,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 
 import Game from './Game'
 
-const GameList = ({ gamesState, fetchGames }) => (
+const GameList = ({ gamesState, fetchGames, joinGame }) => (
   <div className='FlexColumn'>
-    {gamesState.get('items') === null ? <div><i>No Games</i></div> : gamesState.get('items').map((game,i) => <Game key={i} game={game} />)}
+    {gamesState.get('items') === null ? <div><i>No Games</i></div> : gamesState.get('items').map((game,i) => <Game key={i} game={game} joinGame={joinGame} />)}
     <br />
     <div>{gamesState.get('isFetching') ? 'Fetching...' : ''}</div>
     <div>Last Updated: {gamesState.get('lastUpdated') !== null ? gamesState.get('lastUpdated').toString() : 'never'}</div>
@@ -23,7 +23,8 @@ GameList.propTypes = {
       })
     )
   }),
-  fetchGames: PropTypes.func.isRequired
+  fetchGames: PropTypes.func.isRequired,
+  joinGame: PropTypes.func.isRequired
 }
 
 export default GameList

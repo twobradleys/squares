@@ -1,7 +1,10 @@
 import { connect } from 'react-redux'
 import { clickGridSquare } from '../actions'
+import { getCellsInGrid } from '../selectors'
 import Cell from '../components/Cell'
 
+
+/*
 const mapStateToProps = (state, ownProps) => {
   const owningPlayerId = state.getIn(['grid', 'entries', ownProps.i, ownProps.j])
 
@@ -20,6 +23,23 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onClick: () => {
     dispatch(clickGridSquare({i: ownProps.i, j: ownProps.j}))
+  }
+})
+*/
+
+const mapStateToProps = (state, ownProps) => {
+  const cellsInGrid = getCellsInGrid(state)
+  const cell = cellsInGrid.getIn([ownProps.i, ownProps.j])
+
+  return {
+    contents: JSON.stringify(cell.toJS()),
+    active: false
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onClick: () => {
+    console.log("hi")
   }
 })
 

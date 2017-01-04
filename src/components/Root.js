@@ -1,20 +1,23 @@
 import React, { PropTypes } from 'react'
 import { Provider } from 'react-redux'
 import { IndexRoute, Route, Router, browserHistory } from 'react-router'
-import App from './App'
+import Nav from '../containers/Nav'
 import ServerGameList from '../containers/ServerGameList'
 import ServerPlayerList from '../containers/ServerPlayerList'
 import ServerTeamList from '../containers/ServerTeamList'
 import Home from '../components/Home'
+import PlayGame from '../containers/PlayGame'
 
+// TODO onEnter guard on PlayGame
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={App}>
+      <Route path="/" component={Nav}>
         <IndexRoute component={Home} />
         <Route path="/games" component={ServerGameList} />
         <Route path="/players" component={ServerPlayerList} />
         <Route path="/teams" component={ServerTeamList} />
+        <Route path="/play" component={PlayGame} />
       </Route>
     </Router>
   </Provider>

@@ -22,3 +22,8 @@ export const lockEntries = createAction('LOCK_ENTRIES', () => ({digitSeeds: Immu
 
 // Session state
 export const signIn = createAction('SIGN_IN')
+export const joinGame = createAction('JOIN_GAME') // payload is a game entity
+
+
+// Umm
+export const fetchCellsForGame = createAction('FETCH_CELLS_FOR_GAME') // payload is a game entity

@@ -1,16 +1,18 @@
 import React, { PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 
-const Game = ({ game }) => (
+const Game = ({ game, joinGame }) => (
   <div className='FlexColumn'>
-    <div>{game.get('event_name')}</div>
+    <div>{game.get('event_name')}</div><div><button onClick={() => joinGame(game)}>Join</button></div>
   </div>
 )
 
 Game.propTypes = {
   game: ImmutablePropTypes.contains({
-    event_name: PropTypes.string.isRequired
-  }).isRequired
+    event_name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+  }).isRequired,
+  joinGame: PropTypes.func.isRequired
 }
 
 export default Game

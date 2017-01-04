@@ -1,8 +1,9 @@
 import { connect } from 'react-redux'
 import GridBody from '../components/GridBody'
+import { getCellsInGrid } from '../selectors'
 
 const mapStateToProps = (state) => ({
- entries: state.getIn(['grid', 'entries'])
+ entries: getCellsInGrid(state)
 })
 
 const mapDispatchToProps = ({
