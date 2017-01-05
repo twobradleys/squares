@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { allSquaresClaimed } from '../selectors'
 import { lockEntries } from '../actions'
 
+// TODO unused
+
 let LockEntries = ({ allSquaresClaimed, locked, lockEntries }) => {
   if (allSquaresClaimed && !locked) {
     return (

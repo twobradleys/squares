@@ -3,7 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 
 const Game = ({ game, joinGame }) => (
   <div className='FlexColumn'>
-    <div>{game.get('event_name')}</div><div><button onClick={() => joinGame(game)}>Join</button></div>
+    <div>{game.get('event_name')}</div><div><button className='pure-button' onClick={() => joinGame(game)}>Join</button></div>
   </div>
 )
 

@@ -5,11 +5,13 @@ import './App.css'
 
 const App = ({ children, readyToPlay }) => (
   <div className="FlexColumn">
-    <div className="FlexRow" style={{justifyContent: 'space-around'}}>
-      <div><Link to="/games">Games</Link></div>
-      <div><Link to="/players">Players</Link></div>
-      <div><Link to="/teams">Teams</Link></div>
-      {readyToPlay ? <div><Link to="/play">Play!</Link></div> : null}
+    <div className="pure-menu pure-menu-horizontal">
+      <ul className="pure-menu-list">
+        <li className="pure-menu-item"><Link className="pure-menu-link" to="/games">Games</Link></li>
+        <li className="pure-menu-item"><Link className="pure-menu-link" to="/players">Players</Link></li>
+        <li className="pure-menu-item"><Link className="pure-menu-link" to="/teams">Teams</Link></li>
+        {readyToPlay ? <li><Link to="/play">Play!</Link></li> : null}
+      </ul>
     </div>
     {children}
   </div>
