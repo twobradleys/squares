@@ -3,6 +3,7 @@ import { createAction } from 'redux-actions'
 import Immutable from 'immutable'
 
 // Entities
+export const initializeEntity = createAction('INITIALIZE_ENTITY')
 export const fetchEntities = createAction('FETCH_ENTITIES')
 export const waitingForFetchEntities = createAction('WAITING_FOR_FETCH_ENTITIES')
 export const createEntity = createAction('CREATE_ENTITY')

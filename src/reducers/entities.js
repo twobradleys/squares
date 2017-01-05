@@ -7,29 +7,29 @@ const initialEntityState = Immutable.Map({
   items: Immutable.List(),
 })
 
-const initialState = Immutable.Map({
-  // TODO do i need to dup these? shouldn't have to but maybe this creates coupling?
-  cells: initialEntityState,
-  games: initialEntityState,
-  players: initialEntityState,
-  teams: initialEntityState,
-})
+const entityPath = (action) =>
+  [action.payload.entityType, action.payload.collectionId].filter(x => x)
+
+const updateEntities = (state, action, fn) =>
+  state.updateIn(entityPath(action), fn)
 
 const entities = handleActions({
-  // TODO generalize to all API calls
+  'INITIALIZE_ENTITY': (state, action) =>
+    updateEntities(state, action, entities => entities || initialEntityState),
+
   'WAITING_FOR_FETCH_ENTITIES': (state, action) =>
-    state.update(action.payload.entityType, entities =>
-      entities.set('isFetching', true)),
+    updateEntities(state, action, entities => entities.set('isFetching', true)),
 
   'RECEIVE_ENTITIES': (state, action) =>
-    state.update(action.payload.entityType, entities =>
+    updateEntities(state, action, entities =>
       entities.set('isFetching', false)
               .set('lastUpdated', new Date())
               .set('items', Immutable.fromJS(action.payload.items))), // TODO push fromJS down to API?
 
   'ADD_ENTITY_PROVISIONAL': (state, action) =>
-    state.update(action.payload.entityType, entities =>
+    updateEntities(state, action, entities =>
       entities.update('items', items => items.push(Immutable.Map(action.payload.newEntity))))
-}, initialState)
+
+}, Immutable.Map())
 
 export default entities

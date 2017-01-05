@@ -1,20 +1,6 @@
 import Immutable from 'immutable'
 import { createSelector } from 'reselect'
 
-const getCells = (state) =>
-  state.getIn(['entities', 'cells', 'items'])
-
-export const getCellsInGrid = createSelector(
-  [ getCells ],
-  ( cells ) => {
-    const dims = Immutable.Range(0, 10).toList()
-    const emptyGrid = dims.map(() => dims.map(() => Immutable.Map()))
-    return cells.reduce((grid, cell) =>
-      grid.setIn([cell.get('away_index'), cell.get('home_index')], cell)
-                      , emptyGrid)
-  }
-)
-
 /*
 // TODO not a selector. want to factor out this cod to use in reducer, but ideally reducer would benefit from selector memoization as well
 export const findUnclaimedSquares = (entries) =>
@@ -39,4 +25,23 @@ export const getCurrentGame = (state) =>
 export const readyToPlay = createSelector(
   [ getCurrentPlayer, getCurrentGame ],
   ( currentPlayer   , currentGame ) => (currentPlayer != null) && (currentGame != null)
+)
+
+const getAllCells = (state) =>
+  state.getIn(['entities', 'cells'])
+
+const getCellsForCurrentGame = createSelector(
+  [ getCurrentGame, getAllCells ],
+  ( currentGame, allCells ) => allCells.getIn([currentGame.get('id'), 'items'])
+)
+
+export const getCellsInGrid = createSelector(
+  [ getCellsForCurrentGame ],
+  ( cells ) => {
+    const dims = Immutable.Range(0, 10).toList()
+    const emptyGrid = dims.map(() => dims.map(() => Immutable.Map()))
+    return cells.reduce((grid, cell) =>
+      grid.setIn([cell.get('away_index'), cell.get('home_index')], cell)
+                      , emptyGrid)
+  }
 )

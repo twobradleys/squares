@@ -9,14 +9,17 @@ import Immutable from 'immutable'
 
 function* fetchEntities(action) {
   const entityType = action.payload.entityType
+  const collectionId = action.payload.collectionId
+
+  yield put(actions.initializeEntity({entityType, collectionId}))
 
   try {
-    const fetchTimerTask = yield fork(startFetchTimer, {entityType})
-    const items = yield call(api[entityType].fetch)
+    const fetchTimerTask = yield fork(startFetchTimer, {entityType, collectionId})
+    const items = yield call(api[entityType].fetch, {collectionId})
     yield cancel(fetchTimerTask)
-    yield put(actions.receiveEntities({entityType, items}))
+    yield put(actions.receiveEntities({entityType, items, collectionId}))
   } catch (error) {
-    yield put(actions.receiveEntitiesFailed({entityType, error}))
+    yield put(actions.receiveEntitiesFailed({entityType, collectionId, error}))
   }
 }
 
@@ -26,13 +29,6 @@ function* createEntity(action) {
   yield put(actions.addEntityProvisional(payload))
   yield call(api[entityType].create, action.payload.newEntity)
   yield put(actions.fetchEntities({entityType})) // refresh
-}
-
-function* fetchCellsForGame(action) {
-  const id = action.payload.get('id')
-  const items = yield call(api.cells.fetch, {id})
-  const entityType = 'cells'
-  yield put(actions.receiveEntities({entityType, items})) // TODO need to stash these by game id?
 }
 
 function* clickEntryCell(action) {
@@ -59,15 +55,20 @@ function* handleCreateEntity() {
   yield takeEvery('CREATE_ENTITY', createEntity)
 }
 
+// slight hack - we are using a "nav" change to fire off a fetch event as a side effect. better way to do this?
+function* fetchCellsForGame(action) {
+  yield call(fetchEntities, {payload: {entityType: 'cells', collectionId: action.payload.get('id')}})
+}
+
 function* handleFetchCellsForGame() {
   // TODO DRY out
   yield takeEvery('FETCH_CELLS_FOR_GAME', fetchCellsForGame)
 }
 
-// slight hack - we are using a "nav" change to fire off a fetch event as a side effect. better way to do this?
 function* handleJoinGame() {
   yield takeEvery('JOIN_GAME', fetchCellsForGame)
 }
+// end hack
 
 // TODO push click up to the view layer and change this to "buy" / "sell" / whatever
 function* handleClickEntryCell() {
@@ -84,9 +85,9 @@ function* periodicallyFetchEntities(entityType) {
   }
 }
 
-function* startFetchTimer({entityType}) {
+function* startFetchTimer({entityType, collectionId}) {
   yield call(delay, 200)
-  yield put(actions.waitingForFetchEntities({entityType}))
+  yield put(actions.waitingForFetchEntities({entityType, collectionId}))
 }
 
 export default function* root() {
