@@ -3,14 +3,23 @@ import { Link } from 'react-router'
 
 import './App.css'
 
+const MenuItem = ({to, label}) => (
+  <li className="pure-menu-item"><Link className="pure-menu-link" to={to}>{label}</Link></li>
+)
+
+MenuItem.propTypes = {
+  to: PropTypes.string.required,
+  label: PropTypes.string.required,
+}
+
 const App = ({ children, readyToPlay }) => (
   <div className="FlexColumn">
     <div className="pure-menu pure-menu-horizontal">
       <ul className="pure-menu-list">
-        <li className="pure-menu-item"><Link className="pure-menu-link" to="/games">Games</Link></li>
-        <li className="pure-menu-item"><Link className="pure-menu-link" to="/players">Players</Link></li>
-        <li className="pure-menu-item"><Link className="pure-menu-link" to="/teams">Teams</Link></li>
-        {readyToPlay ? <li><Link to="/play">Play!</Link></li> : null}
+        <MenuItem to="/games" label="Games" />
+        <MenuItem to="/players" label="Players" />
+        <MenuItem to="/teams" label="Teams" />
+        {readyToPlay ? <MenuItem to="/play" label="Play!" /> : null}
       </ul>
     </div>
     {children}
