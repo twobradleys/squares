@@ -7,8 +7,15 @@ import ServerPlayerList from '../containers/ServerPlayerList'
 import ServerTeamList from '../containers/ServerTeamList'
 import Home from '../components/Home'
 import PlayGame from '../containers/PlayGame'
+import { readyToPlay } from '../selectors'
 
-// TODO onEnter guard on PlayGame
+const onEnterPlayGame = (store) => (nextState, replace) => {
+  if (!readyToPlay(store.getState())) {
+    // redirect to home i guess
+    replace('/')
+  }
+}
+
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router history={browserHistory}>
@@ -17,7 +24,7 @@ const Root = ({ store }) => (
         <Route path="/games" component={ServerGameList} />
         <Route path="/players" component={ServerPlayerList} />
         <Route path="/teams" component={ServerTeamList} />
-        <Route path="/play" component={PlayGame} />
+        <Route path="/play" component={PlayGame} onEnter={onEnterPlayGame(store)} />
       </Route>
     </Router>
   </Provider>
