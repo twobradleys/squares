@@ -8,8 +8,8 @@ const MenuItem = ({to, label}) => (
 )
 
 MenuItem.propTypes = {
-  to: PropTypes.string.required,
-  label: PropTypes.string.required,
+  to: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
 }
 
 const App = ({ children, readyToPlay }) => (
