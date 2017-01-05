@@ -9,7 +9,7 @@ const GameList = ({ gamesState, fetchGames, joinGame }) => (
     <br />
     <div>{gamesState.get('isFetching') ? 'Fetching...' : ''}</div>
     <EntityLastUpdated lastUpdated={gamesState.get('lastUpdated')} />
-    <button onClick={fetchGames}>Refresh</button>
+    <button className='pure-button' onClick={fetchGames}>Refresh</button>
   </div>
 )
 

@@ -8,7 +8,7 @@ let AddPlayer = ({ locked, addPlayer }) => {
   } else {
     return (
       <div>
-        <button onClick={() => addPlayer(window.prompt("Player Initials?"))}>Add Player</button>
+        <button className='pure-button' onClick={() => addPlayer(window.prompt("Player Initials?"))}>Add Player</button>
       </div>
     )
   }

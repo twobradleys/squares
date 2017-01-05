@@ -30,7 +30,7 @@ import Grid from './Grid'
 const GameBoard = ({ game, current_player_id, fetchCellsForGame }) => (
   <div>
     <h1>{game.get('event_name')}</h1>
-    <button onClick={() => fetchCellsForGame(game)}>Load cells</button>
+    <button className='pure-button' onClick={() => fetchCellsForGame(game)}>Load cells</button>
     <Grid current_player_id={current_player_id} game_id={game.get('id')} />
   </div>
 )

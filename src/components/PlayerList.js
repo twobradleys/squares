@@ -12,8 +12,8 @@ const PlayerList = ({ playersState, fetchPlayers, createPlayer, signIn }) => (
     {/* TODO only show fetching... if it has been up for 200ms+ (to avoid flashing) */}
     <div>{playersState.get('isFetching') ? 'Fetching...' : ''}</div>
     <EntityLastUpdated lastUpdated={playersState.get('lastUpdated')} />
-    <button onClick={fetchPlayers}>Refresh</button>
-    <button onClick={() => createPlayer({handle: window.prompt("Player name?")})}>Add Player</button>
+    <button className='pure-button' onClick={fetchPlayers}>Refresh</button>
+    <button className='pure-button' onClick={() => createPlayer({handle: window.prompt("Player name?")})}>Add Player</button>
   </div>
 )
 
